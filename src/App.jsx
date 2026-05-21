@@ -42,7 +42,7 @@ function App() {
       })
 
       if (!response.ok) {
-        throw new Error('E-mail ou senha invalidos.')
+        throw new Error('E-mail ou senha inválidos.')
       }
 
       const data = await response.json()
@@ -52,10 +52,10 @@ function App() {
       storage.setItem('eventhub.tokenType', data.tokenType)
       storage.setItem('eventhub.user', JSON.stringify(data.user))
 
-      setMessage(`Bem-vindo de volta, ${data.user?.name ?? 'usuario'}!`)
+      setMessage(`Bem-vindo de volta, ${data.user?.name ?? 'usuário'}!`)
       setMessageType('success')
     } catch (error) {
-      setMessage(error.message || 'Nao foi possivel entrar agora.')
+      setMessage(error.message || 'Não foi possível entrar agora.')
       setMessageType('error')
     } finally {
       setIsLoading(false)
@@ -66,7 +66,7 @@ function App() {
     <main className="login-page">
       <section className="brand-panel" aria-label="EventHub">
         <div className="brand-content">
-          <a className="brand-mark" href="/" aria-label="EventHub pagina inicial">
+          <a className="brand-mark" href="/" aria-label="Página inicial do EventHub">
             <span className="brand-icon" aria-hidden="true">
               <span />
             </span>
@@ -80,31 +80,31 @@ function App() {
             </p>
           </div>
 
-          <dl className="brand-metrics" aria-label="EventHub metrics">
+          <dl className="brand-metrics" aria-label="Métricas do EventHub">
             <div>
               <dt>10k+</dt>
-              <dd>Events managed</dd>
+              <dd>Eventos gerenciados</dd>
             </div>
             <div>
               <dt>99.9%</dt>
-              <dd>Uptime reliability</dd>
+              <dd>Disponibilidade</dd>
             </div>
           </dl>
         </div>
 
-        <p className="brand-footer">© 2026 EventHub. Precision in planning.</p>
+        <p className="brand-footer">© 2026 EventHub. Precisão no planejamento.</p>
       </section>
 
       <section className="auth-panel" aria-labelledby="login-title">
         <div className="auth-card">
           <div className="auth-heading">
-            <h2 id="login-title">Welcome back</h2>
-            <p>Please enter your credentials to access your dashboard.</p>
+            <h2 id="login-title">Bem-vindo de volta</h2>
+            <p>Digite suas credenciais para acessar seu painel.</p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
             <label className="field">
-              <span>Email address</span>
+              <span>E-mail</span>
               <input
                 autoComplete="email"
                 name="email"
@@ -118,8 +118,8 @@ function App() {
 
             <label className="field">
               <span className="field-row">
-                Password
-                <a href="/forgot-password">Forgot Password?</a>
+                Senha
+                <a href="/forgot-password">Esqueceu a senha?</a>
               </span>
               <span className="password-control">
                 <input
@@ -132,7 +132,7 @@ function App() {
                   value={form.password}
                 />
                 <button
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   className="icon-button"
                   onClick={() => setShowPassword((visible) => !visible)}
                   type="button"
@@ -149,7 +149,7 @@ function App() {
                 onChange={handleChange}
                 type="checkbox"
               />
-              <span>Keep me signed in for 30 days</span>
+              <span>Manter conectado por 30 dias</span>
             </label>
 
             {message && (
@@ -159,12 +159,12 @@ function App() {
             )}
 
             <button className="submit-button" disabled={isLoading} type="submit">
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 
           <div className="divider">
-            <span>Or continue with</span>
+            <span>Ou continue com</span>
           </div>
 
           <div className="provider-actions">
@@ -174,19 +174,19 @@ function App() {
             </button>
             <button type="button">
               <span className="briefcase-icon" aria-hidden="true" />
-              SSO
+              Acesso SSO
             </button>
           </div>
 
           <p className="request-access">
-            Don't have an account? <a href="/request-access">Request Access</a>
+            Não tem uma conta? <a href="/request-access">Solicitar acesso</a>
           </p>
         </div>
 
-        <nav className="legal-links" aria-label="Legal links">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/support">Support</a>
+        <nav className="legal-links" aria-label="Links legais">
+          <a href="/privacy">Privacidade</a>
+          <a href="/terms">Termos</a>
+          <a href="/support">Suporte</a>
         </nav>
       </section>
     </main>
