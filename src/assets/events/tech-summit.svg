@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Conferência de tecnologia com palco iluminado">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#061426"/>
+      <stop offset="0.52" stop-color="#05355d"/>
+      <stop offset="1" stop-color="#0a1020"/>
+    </linearGradient>
+    <radialGradient id="light" cx="50%" cy="12%" r="58%">
+      <stop offset="0" stop-color="#55d7ff" stop-opacity=".95"/>
+      <stop offset=".42" stop-color="#1b83be" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#07111f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="520" fill="url(#bg)"/>
+  <rect width="1200" height="520" fill="url(#light)"/>
+  <path d="M145 70h910v280H145z" fill="#07101d" opacity=".72"/>
+  <path d="M192 112h210v132H192zm596 0h210v132H788z" fill="#0f8fc6" opacity=".5"/>
+  <path d="M457 92h286v188H457z" fill="#11324a"/>
+  <path d="M488 128h224v115H488z" fill="#0aa5d9" opacity=".38"/>
+  <path d="M518 162c30-32 78-38 116-15 34 20 49 57 37 93" fill="none" stroke="#bff8ff" stroke-width="8" opacity=".8"/>
+  <g stroke-linecap="round" opacity=".72">
+    <path d="M260 352 488 92" stroke="#2dd7ff" stroke-width="7"/>
+    <path d="M940 352 712 92" stroke="#2dd7ff" stroke-width="7"/>
+    <path d="M350 352 570 92" stroke="#ff3ab6" stroke-width="8"/>
+    <path d="M850 352 630 92" stroke="#ff3ab6" stroke-width="8"/>
+  </g>
+  <path d="M0 378h1200v142H0z" fill="#040812"/>
+  <path d="M160 374h880v32H160z" fill="#111f31"/>
+  <g fill="#8ac7d8" opacity=".55">
+    <circle cx="75" cy="430" r="7"/><circle cx="104" cy="454" r="7"/><circle cx="134" cy="417" r="7"/>
+    <circle cx="1002" cy="430" r="7"/><circle cx="1040" cy="458" r="7"/><circle cx="1092" cy="420" r="7"/>
+  </g>
+  <g fill="#1a3245">
+    <path d="M0 410c190-48 360-48 520 0v110H0z"/>
+    <path d="M1200 410c-190-48-360-48-520 0v110h520z"/>
+  </g>
+  <g fill="#e8f7ff">
+    <rect x="590" y="306" width="24" height="62" rx="4"/>
+    <circle cx="602" cy="292" r="16"/>
+  </g>
+</svg>

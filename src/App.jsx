@@ -32,7 +32,8 @@ const imagensPorEvento = {
   12: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=80',
 };
 
-const imagemPadrao = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80';
+const imagemPadrao =
+  'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80';
 
 const rotulosStatus = {
   DRAFT: 'Rascunho',
@@ -60,10 +61,15 @@ function CartaoEvento({ evento }) {
     <article className="cartao-evento">
       <div className="imagem-evento">
         <img src={imagem} alt="" />
+
         <span className={`selo-status status-${evento.status?.toLowerCase()}`}>
           {rotulosStatus[evento.status] ?? evento.status}
         </span>
-        <button className="botao-icone botao-editar" aria-label={`Editar ${evento.title}`}>
+
+        <button
+          className="botao-icone botao-editar"
+          aria-label={`Editar ${evento.title}`}
+        >
           <Pencil size={18} />
         </button>
       </div>
@@ -71,6 +77,7 @@ function CartaoEvento({ evento }) {
       <div className="conteudo-evento">
         <div className="linha-meta">
           <span className="etiqueta">{evento.category}</span>
+
           <span className="meta">
             <CalendarDays size={14} />
             {formatarData(evento.startAt)}
@@ -78,6 +85,7 @@ function CartaoEvento({ evento }) {
         </div>
 
         <h2>{evento.title}</h2>
+
         <p>{evento.description}</p>
 
         <span className="local">
@@ -87,6 +95,7 @@ function CartaoEvento({ evento }) {
 
         <div className="rodape-cartao">
           <strong>{evento.capacity} vagas</strong>
+
           <button>Detalhes</button>
         </div>
       </div>
@@ -98,7 +107,9 @@ function FiltroBotao({ icon, children }) {
   return (
     <button className="filtro-botao">
       {createElement(icon, { size: 16 })}
+
       <span>{children}</span>
+
       <ChevronDown size={15} />
     </button>
   );
@@ -119,6 +130,7 @@ function App() {
 
     async function carregarDados() {
       setCarregando(true);
+
       try {
         const [eventosResposta, categoriasResposta] = await Promise.all([
           listarEventos(),
@@ -126,11 +138,13 @@ function App() {
         ]);
 
         if (!ativo) return;
+
         setEventos(obterConteudoPagina(eventosResposta));
         setCategorias(categoriasResposta);
         setOrigemExemplo(false);
       } catch {
         if (!ativo) return;
+
         setEventos(eventosExemplo);
         setCategorias(categoriasExemplo);
         setOrigemExemplo(true);
@@ -151,12 +165,18 @@ function App() {
     const local = localBusca.trim().toLowerCase();
 
     return eventos.filter((evento) => {
-      const combinaTermo = !termo || [evento.title, evento.description, evento.category]
-        .join(' ')
-        .toLowerCase()
-        .includes(termo);
-      const combinaLocal = !local || evento.location.toLowerCase().includes(local);
-      const combinaCategoria = !categoriaAtiva || evento.category === categoriaAtiva;
+      const combinaTermo =
+        !termo ||
+        [evento.title, evento.description, evento.category]
+          .join(' ')
+          .toLowerCase()
+          .includes(termo);
+
+      const combinaLocal =
+        !local || evento.location.toLowerCase().includes(local);
+
+      const combinaCategoria =
+        !categoriaAtiva || evento.category === categoriaAtiva;
 
       return combinaTermo && combinaLocal && combinaCategoria;
     });
@@ -173,17 +193,27 @@ function App() {
   return (
     <div className="aplicacao">
       <header className="topo">
-        <a className="marca" href="/">EventHub</a>
+        <a className="marca" href="/">
+          EventHub
+        </a>
+
         <nav aria-label="Navegacao principal">
-          <a className="ativo" href="/">Descobrir</a>
+          <a className="ativo" href="/">
+            Descobrir
+          </a>
+
           <a href="/">Gerenciar</a>
         </nav>
+
         <div className="acoes-topo">
           <button className="botao-criar">
             <Plus size={18} />
             Criar evento
           </button>
-          <div className="avatar" aria-label="Perfil do usuario">EH</div>
+
+          <div className="avatar" aria-label="Perfil do usuario">
+            EH
+          </div>
         </div>
       </header>
 
@@ -195,6 +225,7 @@ function App() {
             <div className="linha-busca">
               <label className="campo-busca">
                 <Search size={22} />
+
                 <input
                   type="search"
                   value={termoBusca}
@@ -205,6 +236,7 @@ function App() {
 
               <label className="campo-busca campo-local">
                 <MapPin size={22} />
+
                 <input
                   value={localBusca}
                   onChange={(evento) => setLocalBusca(evento.target.value)}
@@ -217,11 +249,15 @@ function App() {
 
             <div className="linha-filtros">
               <span>Filtros:</span>
+
               <FiltroBotao icon={CalendarDays}>Periodo</FiltroBotao>
               <FiltroBotao icon={SlidersHorizontal}>Categoria</FiltroBotao>
               <FiltroBotao icon={Ticket}>Status</FiltroBotao>
               <FiltroBotao icon={Users}>Capacidade</FiltroBotao>
-              <button className="limpar" onClick={limparFiltros}>Limpar filtros</button>
+
+              <button className="limpar" onClick={limparFiltros}>
+                Limpar filtros
+              </button>
             </div>
           </div>
         </section>
@@ -229,24 +265,40 @@ function App() {
         <section className="barra-resultados">
           <div>
             <p>
-              Mostrando <strong>{totalResultados}</strong> evento{totalResultados === 1 ? '' : 's'}
+              Mostrando <strong>{totalResultados}</strong> evento
+              {totalResultados === 1 ? '' : 's'}
               {termoBusca ? ` para "${termoBusca}"` : ''}
             </p>
-            {origemExemplo && <span>Usando dados de exemplo ate o backend responder.</span>}
+
+            {origemExemplo && (
+              <span>
+                Usando dados de exemplo ate o backend responder.
+              </span>
+            )}
           </div>
 
           <div className="controles-lista">
             <div className="alternador" aria-label="Modo de visualizacao">
-              <button className={modoGrade ? 'ativo' : ''} onClick={() => setModoGrade(true)} aria-label="Ver em grade">
+              <button
+                className={modoGrade ? 'ativo' : ''}
+                onClick={() => setModoGrade(true)}
+                aria-label="Ver em grade"
+              >
                 <Grid2X2 size={20} />
               </button>
-              <button className={!modoGrade ? 'ativo' : ''} onClick={() => setModoGrade(false)} aria-label="Ver em lista">
+
+              <button
+                className={!modoGrade ? 'ativo' : ''}
+                onClick={() => setModoGrade(false)}
+                aria-label="Ver em lista"
+              >
                 <List size={20} />
               </button>
             </div>
 
             <label className="ordenacao">
               <span>Ordenar:</span>
+
               <select defaultValue="recentes">
                 <option value="recentes">Mais recentes</option>
                 <option value="nome">Nome</option>
@@ -257,13 +309,19 @@ function App() {
         </section>
 
         <section className="categorias" aria-label="Categorias">
-          <button className={categoriaAtiva === '' ? 'ativo' : ''} onClick={() => setCategoriaAtiva('')}>
+          <button
+            className={categoriaAtiva === '' ? 'ativo' : ''}
+            onClick={() => setCategoriaAtiva('')}
+          >
             Todas
           </button>
+
           {categorias.map((categoria) => (
             <button
               key={categoria.id ?? categoria.name}
-              className={categoriaAtiva === categoria.name ? 'ativo' : ''}
+              className={
+                categoriaAtiva === categoria.name ? 'ativo' : ''
+              }
               onClick={() => setCategoriaAtiva(categoria.name)}
             >
               {categoria.name}
@@ -274,7 +332,9 @@ function App() {
         {carregando ? (
           <section className="estado">Carregando eventos...</section>
         ) : (
-          <section className={modoGrade ? 'grade-eventos' : 'lista-eventos'}>
+          <section
+            className={modoGrade ? 'grade-eventos' : 'lista-eventos'}
+          >
             {eventosFiltrados.map((evento) => (
               <CartaoEvento key={evento.id} evento={evento} />
             ))}
@@ -283,28 +343,42 @@ function App() {
               <span>
                 <Plus size={34} />
               </span>
+
               <strong>Criar novo evento</strong>
-              <small>Adicione uma nova publicacao ao ecossistema EventHub</small>
+
+              <small>
+                Adicione uma nova publicacao ao ecossistema EventHub
+              </small>
             </button>
           </section>
         )}
 
         <nav className="paginacao" aria-label="Paginacao">
-          <button aria-label="Pagina anterior"><ChevronLeft size={18} /></button>
+          <button aria-label="Pagina anterior">
+            <ChevronLeft size={18} />
+          </button>
+
           <button className="ativo">1</button>
           <button>2</button>
           <button>3</button>
+
           <span>...</span>
+
           <button>12</button>
-          <button aria-label="Proxima pagina"><ChevronRight size={18} /></button>
+
+          <button aria-label="Proxima pagina">
+            <ChevronRight size={18} />
+          </button>
         </nav>
       </main>
 
       <footer>
         <div>
           <strong>EventHub</strong>
+
           <span>© 2026 EventHub. Planejamento preciso.</span>
         </div>
+
         <nav aria-label="Links de rodape">
           <a href="/">Privacidade</a>
           <a href="/">Termos</a>
