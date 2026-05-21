@@ -614,3 +614,21 @@
     gap: 14px 22px;
   }
 }
+.painel-login {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid #d0d6e2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.painel-login form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.painel-login input {
+  min-height: 40px;
+  padding: 0 10px;
+}

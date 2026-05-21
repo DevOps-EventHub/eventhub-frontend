@@ -1,7 +1,9 @@
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 async function buscarJson(caminho) {
-  const resposta = await fetch(`${API_BASE}${caminho}`);
+  const resposta = await fetch(`${API_BASE}${caminho}`, {
+    credentials: 'include',
+  });
 
   if (!resposta.ok) {
     throw new Error('Nao foi possivel carregar os dados do EventHub.');
