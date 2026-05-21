@@ -1,398 +1,393 @@
-import { useEffect, useMemo, useState } from 'react'
-import designWorkshopImage from './assets/events/design-workshop.svg'
-import futureCitiesImage from './assets/events/future-cities-expo.svg'
-import networkingGalaImage from './assets/events/networking-gala.svg'
-import saasFounderImage from './assets/events/saas-founder-meetup.svg'
-import strategyRetreatImage from './assets/events/strategy-retreat.svg'
-import techSummitImage from './assets/events/tech-summit.svg'
-import wellnessDayImage from './assets/events/wellness-day.svg'
-import './App.css'
+import { createElement, useEffect, useMemo, useState } from 'react';
+import {
+  CalendarDays,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Grid2X2,
+  List,
+  MapPin,
+  Pencil,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  Ticket,
+  Users,
+} from 'lucide-react';
+import { listarCategorias, listarEventos } from './api/eventos.js';
+import { categoriasExemplo, eventosExemplo } from './data/eventosExemplo.js';
 
-const eventosModelo = [
-  {
-    eventId: 1,
-    title: 'Summit Global de Tecnologia 2026',
-    category: 'Tecnologia e Inovação',
-    location: 'São Paulo, SP',
-    startAt: '2026-08-24T09:00:00-03:00',
-    description: 'Conferência para líderes de produto, engenharia e operações.',
-    tag: 'Ao vivo em breve',
-    variant: 'featured',
-    visual: 'summit',
-    image: techSummitImage,
-  },
-  {
-    eventId: 2,
-    title: 'Workshop de Design Systems',
-    category: 'Workshop',
-    location: 'Curitiba, PR',
-    startAt: '2026-09-12T14:00:00-03:00',
-    description: 'Práticas para organizar componentes, tokens e governança visual.',
-    variant: 'compact',
-    visual: 'workshop',
-    image: designWorkshopImage,
-  },
-  {
-    eventId: 3,
-    title: 'Gala Anual de Networking',
-    category: 'Networking',
-    location: 'Rio de Janeiro, RJ',
-    startAt: '2026-10-05T19:30:00-03:00',
-    description: 'Encontro executivo para relacionamento e novas oportunidades.',
-    variant: 'compact',
-    visual: 'gala',
-    image: networkingGalaImage,
-  },
-  {
-    eventId: 4,
-    title: 'Retiro de Estratégia Executiva',
-    category: 'Interno',
-    location: 'Gramado, RS',
-    startAt: '2026-11-15T10:00:00-03:00',
-    endAt: '2026-11-18T18:00:00-03:00',
-    description: 'Sessão profunda de planejamento para diretores regionais e líderes.',
-    variant: 'wide',
-    visual: 'strategy',
-    image: strategyRetreatImage,
-  },
-  {
-    eventId: 5,
-    title: 'Dia de Bem-estar Corporativo',
-    category: 'Bem-estar',
-    location: 'Belo Horizonte, MG',
-    startAt: '2026-09-30T08:30:00-03:00',
-    description: 'Experiências práticas para saúde, foco e cultura organizacional.',
-    variant: 'compact',
-    visual: 'wellness',
-    image: wellnessDayImage,
-  },
-  {
-    eventId: 6,
-    title: 'Expo Cidades do Futuro',
-    category: 'Exposição',
-    location: 'Florianópolis, SC',
-    startAt: '2026-10-18T09:00:00-03:00',
-    description: 'Mostra de soluções urbanas, mobilidade e tecnologia sustentável.',
-    variant: 'compact',
-    visual: 'expo',
-    image: futureCitiesImage,
-  },
-  {
-    eventId: 7,
-    title: 'Meetup de Fundadores SaaS',
-    category: 'Startup',
-    location: 'Recife, PE',
-    startAt: '2026-10-22T18:00:00-03:00',
-    description: 'Conversas práticas sobre crescimento, produto e captação.',
-    variant: 'compact',
-    visual: 'startup',
-    image: saasFounderImage,
-  },
-]
+const imagensPorEvento = {
+  1: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80',
+  2: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80',
+  3: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80',
+  4: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=900&q=80',
+  5: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+  6: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80',
+  7: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80',
+  8: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=900&q=80',
+  9: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80',
+  10: 'https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=900&q=80',
+  11: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80',
+  12: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=80',
+};
 
-function obterToken() {
-  return localStorage.getItem('eventhub.token') || sessionStorage.getItem('eventhub.token')
+const imagemPadrao =
+  'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80';
+
+const rotulosStatus = {
+  DRAFT: 'Rascunho',
+  PUBLISHED: 'Publicado',
+  CANCELLED: 'Cancelado',
+};
+
+function obterConteudoPagina(resposta) {
+  if (Array.isArray(resposta)) return resposta;
+  return resposta?.content ?? [];
 }
 
 function formatarData(data) {
-  if (!data) {
-    return 'Data a definir'
-  }
-
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  }).format(new Date(data))
+  }).format(new Date(data));
 }
 
-function formatarPeriodo(inicio, fim) {
-  if (!fim) {
-    return formatarData(inicio)
-  }
-
-  const inicioFormatado = new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-  }).format(new Date(inicio))
-  const fimFormatado = new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(fim))
-
-  return `${inicioFormatado} - ${fimFormatado}`
-}
-
-function normalizarEvento(evento, indice) {
-  const modelo = eventosModelo[indice % eventosModelo.length]
-
-  return {
-    ...modelo,
-    ...evento,
-    eventId: evento.eventId ?? modelo.eventId,
-    title: evento.title ?? modelo.title,
-    location: evento.location ?? modelo.location,
-    startAt: evento.startAt ?? modelo.startAt,
-  }
-}
-
-function App() {
-  const [eventosSalvos, setEventosSalvos] = useState(eventosModelo)
-  const [busca, setBusca] = useState('')
-  const [carregando, setCarregando] = useState(true)
-  const [mensagem, setMensagem] = useState('')
-
-  useEffect(() => {
-    async function carregarEventosSalvos() {
-      const token = obterToken()
-
-      if (!token) {
-        setCarregando(false)
-        setMensagem('Entre na sua conta para sincronizar seus eventos salvos.')
-        return
-      }
-
-      try {
-        const resposta = await fetch('/api/saved-events', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        if (!resposta.ok) {
-          throw new Error('Não foi possível carregar os eventos salvos.')
-        }
-
-        const dados = await resposta.json()
-
-        if (dados.length > 0) {
-          setEventosSalvos(dados.map(normalizarEvento))
-          setMensagem('')
-        } else {
-          setEventosSalvos([])
-          setMensagem('Você ainda não salvou nenhum evento.')
-        }
-      } catch (error) {
-        setMensagem(`${error.message} Exibindo uma prévia local.`)
-      } finally {
-        setCarregando(false)
-      }
-    }
-
-    carregarEventosSalvos()
-  }, [])
-
-  const eventosFiltrados = useMemo(() => {
-    const termo = busca.trim().toLowerCase()
-
-    if (!termo) {
-      return eventosSalvos
-    }
-
-    return eventosSalvos.filter((evento) => {
-      return [evento.title, evento.category, evento.location].some((valor) =>
-        valor?.toLowerCase().includes(termo),
-      )
-    })
-  }, [busca, eventosSalvos])
-
-  async function removerEvento(eventId) {
-    const token = obterToken()
-
-    setEventosSalvos((eventosAtuais) =>
-      eventosAtuais.filter((evento) => evento.eventId !== eventId),
-    )
-
-    if (!token) {
-      setMensagem('Evento removido da visualização local.')
-      return
-    }
-
-    try {
-      const resposta = await fetch(`/api/saved-events/${eventId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!resposta.ok) {
-        throw new Error('Não foi possível remover o evento salvo.')
-      }
-
-      setMensagem('Evento removido dos salvos.')
-    } catch (error) {
-      setMensagem(error.message)
-    }
-  }
-
-  async function registrarEvento(eventId) {
-    const token = obterToken()
-
-    if (!token) {
-      setMensagem('Entre na sua conta para se registrar neste evento.')
-      return
-    }
-
-    try {
-      const resposta = await fetch(`/api/registrations/${eventId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (!resposta.ok) {
-        throw new Error('Não foi possível concluir o registro.')
-      }
-
-      setMensagem('Registro realizado com sucesso.')
-    } catch (error) {
-      setMensagem(error.message)
-    }
-  }
+function CartaoEvento({ evento }) {
+  const imagem = imagensPorEvento[evento.id] ?? imagemPadrao;
 
   return (
-    <main className="saved-events-page">
-      <header className="topbar">
-        <a className="app-logo" href="/" aria-label="Página inicial do EventHub">
-          EventHub
-        </a>
+    <article className="cartao-evento">
+      <div className="imagem-evento">
+        <img src={imagem} alt="" />
 
-        <nav className="main-nav" aria-label="Navegação principal">
-          <a href="/eventos">Descobrir</a>
-          <a className="active" href="/eventos-salvos">
-            Gerenciar
-          </a>
-        </nav>
+        <span className={`selo-status status-${evento.status?.toLowerCase()}`}>
+          {rotulosStatus[evento.status] ?? evento.status}
+        </span>
 
-        <label className="search-box">
-          <span className="search-icon" aria-hidden="true" />
-          <input
-            aria-label="Buscar eventos salvos"
-            onChange={(event) => setBusca(event.target.value)}
-            placeholder="Buscar eventos..."
-            type="search"
-            value={busca}
-          />
-        </label>
-
-        <span className="topbar-divider" />
-        <div className="avatar" aria-label="Perfil do usuário" />
-      </header>
-
-      <section className="page-shell">
-        <div className="breadcrumb" aria-label="Caminho da página">
-          <a href="/dashboard">Painel</a>
-          <span aria-hidden="true">›</span>
-          <span>Eventos salvos</span>
-        </div>
-
-        <div className="page-heading">
-          <h1>Eventos Salvos</h1>
-          <p>Gerencie os eventos que você marcou para acompanhar depois.</p>
-        </div>
-
-        {mensagem && <p className="status-message">{mensagem}</p>}
-
-        {carregando ? (
-          <p className="loading-message">Carregando eventos salvos...</p>
-        ) : (
-          <section className="events-grid" aria-label="Lista de eventos salvos">
-            {eventosFiltrados.map((evento, indice) => (
-              <EventCard
-                evento={evento}
-                key={evento.eventId}
-                onRegister={registrarEvento}
-                onRemove={removerEvento}
-                priority={indice}
-              />
-            ))}
-          </section>
-        )}
-      </section>
-
-      <footer className="page-footer">
-        <strong>EventHub</strong>
-        <span>© 2026 EventHub. Precisão no planejamento.</span>
-        <nav aria-label="Links legais">
-          <a href="/privacidade">Privacidade</a>
-          <a href="/termos">Termos</a>
-          <a href="/suporte">Suporte</a>
-          <a href="/contato">Contato</a>
-        </nav>
-      </footer>
-    </main>
-  )
-}
-
-function EventCard({ evento, onRegister, onRemove, priority }) {
-  const isFeatured = evento.variant === 'featured'
-  const isWide = evento.variant === 'wide'
-  const cardClass = ['event-card', isFeatured && 'featured', isWide && 'wide']
-    .filter(Boolean)
-    .join(' ')
-
-  return (
-    <article className={cardClass}>
-      <div className={`event-media ${evento.visual}`}>
-        <img alt={`Imagem do evento ${evento.title}`} src={evento.image} />
-        {evento.tag && <span className="event-tag">{evento.tag}</span>}
         <button
-          aria-label={`Remover ${evento.title} dos salvos`}
-          className="bookmark-button"
-          onClick={() => onRemove(evento.eventId)}
-          type="button"
+          className="botao-icone botao-editar"
+          aria-label={`Editar ${evento.title}`}
         >
-          <span aria-hidden="true" />
+          <Pencil size={18} />
         </button>
       </div>
 
-      <div className="event-content">
-        <div className="event-main">
-          <p className="event-category">{evento.category}</p>
-          <h2>{evento.title}</h2>
-          {isWide && <p className="event-description">{evento.description}</p>}
+      <div className="conteudo-evento">
+        <div className="linha-meta">
+          <span className="etiqueta">{evento.category}</span>
+
+          <span className="meta">
+            <CalendarDays size={14} />
+            {formatarData(evento.startAt)}
+          </span>
         </div>
 
-        {isFeatured ? (
-          <div className="featured-date">
-            <strong>{formatarData(evento.startAt).replace(' de ', ' ')}</strong>
-            <span>{evento.location}</span>
-          </div>
-        ) : (
-          <div className="event-meta">
-            <span className="calendar-icon" aria-hidden="true" />
-            {isWide ? formatarPeriodo(evento.startAt, evento.endAt) : formatarData(evento.startAt)}
-          </div>
-        )}
+        <h2>{evento.title}</h2>
 
-        {isWide && (
-          <div className="event-place">
-            <span className="pin-icon" aria-hidden="true" />
-            {evento.location}
-          </div>
-        )}
+        <p>{evento.description}</p>
 
-        <div className="event-actions">
-          {isFeatured && (
-            <div className="attendees" aria-label={`${priority + 42} participantes interessados`}>
-              <span />
-              <span />
-              <small>+42</small>
-            </div>
-          )}
-          <button className="text-action" onClick={() => onRemove(evento.eventId)} type="button">
-            Remover
-          </button>
-          <button className="outline-action" onClick={() => onRegister(evento.eventId)} type="button">
-            {isFeatured || priority % 2 === 0 ? 'Ver detalhes' : 'Registrar'}
-          </button>
+        <span className="local">
+          <MapPin size={16} />
+          {evento.location}
+        </span>
+
+        <div className="rodape-cartao">
+          <strong>{evento.capacity} vagas</strong>
+
+          <button>Detalhes</button>
         </div>
       </div>
     </article>
-  )
+  );
 }
 
-export default App
+function FiltroBotao({ icon, children }) {
+  return (
+    <button className="filtro-botao">
+      {createElement(icon, { size: 16 })}
+
+      <span>{children}</span>
+
+      <ChevronDown size={15} />
+    </button>
+  );
+}
+
+function App() {
+  const [termoBusca, setTermoBusca] = useState('');
+  const [localBusca, setLocalBusca] = useState('');
+  const [categoriaAtiva, setCategoriaAtiva] = useState('');
+  const [eventos, setEventos] = useState(eventosExemplo);
+  const [categorias, setCategorias] = useState(categoriasExemplo);
+  const [carregando, setCarregando] = useState(true);
+  const [modoGrade, setModoGrade] = useState(true);
+  const [origemExemplo, setOrigemExemplo] = useState(false);
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarDados() {
+      setCarregando(true);
+
+      try {
+        const [eventosResposta, categoriasResposta] = await Promise.all([
+          listarEventos(),
+          listarCategorias(),
+        ]);
+
+        if (!ativo) return;
+
+        setEventos(obterConteudoPagina(eventosResposta));
+        setCategorias(categoriasResposta);
+        setOrigemExemplo(false);
+      } catch {
+        if (!ativo) return;
+
+        setEventos(eventosExemplo);
+        setCategorias(categoriasExemplo);
+        setOrigemExemplo(true);
+      } finally {
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    carregarDados();
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  const eventosFiltrados = useMemo(() => {
+    const termo = termoBusca.trim().toLowerCase();
+    const local = localBusca.trim().toLowerCase();
+
+    return eventos.filter((evento) => {
+      const combinaTermo =
+        !termo ||
+        [evento.title, evento.description, evento.category]
+          .join(' ')
+          .toLowerCase()
+          .includes(termo);
+
+      const combinaLocal =
+        !local || evento.location.toLowerCase().includes(local);
+
+      const combinaCategoria =
+        !categoriaAtiva || evento.category === categoriaAtiva;
+
+      return combinaTermo && combinaLocal && combinaCategoria;
+    });
+  }, [categoriaAtiva, eventos, localBusca, termoBusca]);
+
+  const totalResultados = eventosFiltrados.length;
+
+  function limparFiltros() {
+    setTermoBusca('');
+    setLocalBusca('');
+    setCategoriaAtiva('');
+  }
+
+  return (
+    <div className="aplicacao">
+      <header className="topo">
+        <a className="marca" href="/">
+          EventHub
+        </a>
+
+        <nav aria-label="Navegacao principal">
+          <a className="ativo" href="/">
+            Descobrir
+          </a>
+
+          <a href="/">Gerenciar</a>
+        </nav>
+
+        <div className="acoes-topo">
+          <button className="botao-criar">
+            <Plus size={18} />
+            Criar evento
+          </button>
+
+          <div className="avatar" aria-label="Perfil do usuario">
+            EH
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section className="cabecalho-busca">
+          <h1>Buscar eventos</h1>
+
+          <div className="painel-busca">
+            <div className="linha-busca">
+              <label className="campo-busca">
+                <Search size={22} />
+
+                <input
+                  type="search"
+                  value={termoBusca}
+                  onChange={(evento) => setTermoBusca(evento.target.value)}
+                  placeholder="Busque por nome, palavra-chave ou categoria..."
+                />
+              </label>
+
+              <label className="campo-busca campo-local">
+                <MapPin size={22} />
+
+                <input
+                  value={localBusca}
+                  onChange={(evento) => setLocalBusca(evento.target.value)}
+                  placeholder="Localizacao"
+                />
+              </label>
+
+              <button className="botao-pesquisar">Pesquisar</button>
+            </div>
+
+            <div className="linha-filtros">
+              <span>Filtros:</span>
+
+              <FiltroBotao icon={CalendarDays}>Periodo</FiltroBotao>
+              <FiltroBotao icon={SlidersHorizontal}>Categoria</FiltroBotao>
+              <FiltroBotao icon={Ticket}>Status</FiltroBotao>
+              <FiltroBotao icon={Users}>Capacidade</FiltroBotao>
+
+              <button className="limpar" onClick={limparFiltros}>
+                Limpar filtros
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section className="barra-resultados">
+          <div>
+            <p>
+              Mostrando <strong>{totalResultados}</strong> evento
+              {totalResultados === 1 ? '' : 's'}
+              {termoBusca ? ` para "${termoBusca}"` : ''}
+            </p>
+
+            {origemExemplo && (
+              <span>
+                Usando dados de exemplo ate o backend responder.
+              </span>
+            )}
+          </div>
+
+          <div className="controles-lista">
+            <div className="alternador" aria-label="Modo de visualizacao">
+              <button
+                className={modoGrade ? 'ativo' : ''}
+                onClick={() => setModoGrade(true)}
+                aria-label="Ver em grade"
+              >
+                <Grid2X2 size={20} />
+              </button>
+
+              <button
+                className={!modoGrade ? 'ativo' : ''}
+                onClick={() => setModoGrade(false)}
+                aria-label="Ver em lista"
+              >
+                <List size={20} />
+              </button>
+            </div>
+
+            <label className="ordenacao">
+              <span>Ordenar:</span>
+
+              <select defaultValue="recentes">
+                <option value="recentes">Mais recentes</option>
+                <option value="nome">Nome</option>
+                <option value="capacidade">Capacidade</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section className="categorias" aria-label="Categorias">
+          <button
+            className={categoriaAtiva === '' ? 'ativo' : ''}
+            onClick={() => setCategoriaAtiva('')}
+          >
+            Todas
+          </button>
+
+          {categorias.map((categoria) => (
+            <button
+              key={categoria.id ?? categoria.name}
+              className={
+                categoriaAtiva === categoria.name ? 'ativo' : ''
+              }
+              onClick={() => setCategoriaAtiva(categoria.name)}
+            >
+              {categoria.name}
+            </button>
+          ))}
+        </section>
+
+        {carregando ? (
+          <section className="estado">Carregando eventos...</section>
+        ) : (
+          <section
+            className={modoGrade ? 'grade-eventos' : 'lista-eventos'}
+          >
+            {eventosFiltrados.map((evento) => (
+              <CartaoEvento key={evento.id} evento={evento} />
+            ))}
+
+            <button className="cartao-criar">
+              <span>
+                <Plus size={34} />
+              </span>
+
+              <strong>Criar novo evento</strong>
+
+              <small>
+                Adicione uma nova publicacao ao ecossistema EventHub
+              </small>
+            </button>
+          </section>
+        )}
+
+        <nav className="paginacao" aria-label="Paginacao">
+          <button aria-label="Pagina anterior">
+            <ChevronLeft size={18} />
+          </button>
+
+          <button className="ativo">1</button>
+          <button>2</button>
+          <button>3</button>
+
+          <span>...</span>
+
+          <button>12</button>
+
+          <button aria-label="Proxima pagina">
+            <ChevronRight size={18} />
+          </button>
+        </nav>
+      </main>
+
+      <footer>
+        <div>
+          <strong>EventHub</strong>
+
+          <span>© 2026 EventHub. Planejamento preciso.</span>
+        </div>
+
+        <nav aria-label="Links de rodape">
+          <a href="/">Privacidade</a>
+          <a href="/">Termos</a>
+          <a href="/">Suporte</a>
+          <a href="/">Contato</a>
+        </nav>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
