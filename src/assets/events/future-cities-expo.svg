@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="Estande futurista em exposição urbana">
+  <defs>
+    <linearGradient id="hall" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#172433"/>
+      <stop offset=".48" stop-color="#eef8fb"/>
+      <stop offset="1" stop-color="#2a9fb0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#hall)"/>
+  <path d="M0 0h800v120H0z" fill="#121c28" opacity=".7"/>
+  <path d="M248 52h300l70 236H178z" fill="#f5fbfc"/>
+  <path d="M290 84h200l46 156H244z" fill="#33bfd0" opacity=".22"/>
+  <path d="M352 18c78 0 140 24 186 72-56 18-112 20-168 6-48-12-89-37-122-74 30-3 65-4 104-4z" fill="#1fa9c0"/>
+  <rect x="292" y="164" width="214" height="132" fill="#e7f6f8" stroke="#89ccd5" stroke-width="5"/>
+  <g fill="#0f172a">
+    <circle cx="162" cy="292" r="13"/><rect x="152" y="305" width="20" height="54" rx="8"/>
+    <circle cx="638" cy="282" r="13"/><rect x="628" y="295" width="20" height="64" rx="8"/>
+    <circle cx="540" cy="310" r="11"/><rect x="532" y="322" width="17" height="44" rx="7"/>
+  </g>
+  <path d="M0 318h800v102H0z" fill="#d9edf0" opacity=".75"/>
+</svg>
