@@ -1,195 +1,384 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import heroImage from './assets/hero.png'
 import './App.css'
 
-const initialForm = {
-  email: '',
-  password: '',
-  remember: false,
+const eventosModelo = [
+  {
+    eventId: 1,
+    title: 'Summit Global de Tecnologia 2026',
+    category: 'Tecnologia e Inovação',
+    location: 'São Paulo, SP',
+    startAt: '2026-08-24T09:00:00-03:00',
+    description: 'Conferência para líderes de produto, engenharia e operações.',
+    tag: 'Ao vivo em breve',
+    variant: 'featured',
+    visual: 'summit',
+  },
+  {
+    eventId: 2,
+    title: 'Workshop de Design Systems',
+    category: 'Workshop',
+    location: 'Curitiba, PR',
+    startAt: '2026-09-12T14:00:00-03:00',
+    description: 'Práticas para organizar componentes, tokens e governança visual.',
+    variant: 'compact',
+    visual: 'workshop',
+  },
+  {
+    eventId: 3,
+    title: 'Gala Anual de Networking',
+    category: 'Networking',
+    location: 'Rio de Janeiro, RJ',
+    startAt: '2026-10-05T19:30:00-03:00',
+    description: 'Encontro executivo para relacionamento e novas oportunidades.',
+    variant: 'compact',
+    visual: 'gala',
+  },
+  {
+    eventId: 4,
+    title: 'Retiro de Estratégia Executiva',
+    category: 'Interno',
+    location: 'Gramado, RS',
+    startAt: '2026-11-15T10:00:00-03:00',
+    endAt: '2026-11-18T18:00:00-03:00',
+    description: 'Sessão profunda de planejamento para diretores regionais e líderes.',
+    variant: 'wide',
+    visual: 'strategy',
+  },
+  {
+    eventId: 5,
+    title: 'Dia de Bem-estar Corporativo',
+    category: 'Bem-estar',
+    location: 'Belo Horizonte, MG',
+    startAt: '2026-09-30T08:30:00-03:00',
+    description: 'Experiências práticas para saúde, foco e cultura organizacional.',
+    variant: 'compact',
+    visual: 'wellness',
+  },
+  {
+    eventId: 6,
+    title: 'Expo Cidades do Futuro',
+    category: 'Exposição',
+    location: 'Florianópolis, SC',
+    startAt: '2026-10-18T09:00:00-03:00',
+    description: 'Mostra de soluções urbanas, mobilidade e tecnologia sustentável.',
+    variant: 'compact',
+    visual: 'expo',
+  },
+  {
+    eventId: 7,
+    title: 'Meetup de Fundadores SaaS',
+    category: 'Startup',
+    location: 'Recife, PE',
+    startAt: '2026-10-22T18:00:00-03:00',
+    description: 'Conversas práticas sobre crescimento, produto e captação.',
+    variant: 'compact',
+    visual: 'startup',
+  },
+]
+
+function obterToken() {
+  return localStorage.getItem('eventhub.token') || sessionStorage.getItem('eventhub.token')
+}
+
+function formatarData(data) {
+  if (!data) {
+    return 'Data a definir'
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(data))
+}
+
+function formatarPeriodo(inicio, fim) {
+  if (!fim) {
+    return formatarData(inicio)
+  }
+
+  const inicioFormatado = new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+  }).format(new Date(inicio))
+  const fimFormatado = new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(fim))
+
+  return `${inicioFormatado} - ${fimFormatado}`
+}
+
+function normalizarEvento(evento, indice) {
+  const modelo = eventosModelo[indice % eventosModelo.length]
+
+  return {
+    ...modelo,
+    ...evento,
+    eventId: evento.eventId ?? modelo.eventId,
+    title: evento.title ?? modelo.title,
+    location: evento.location ?? modelo.location,
+    startAt: evento.startAt ?? modelo.startAt,
+  }
 }
 
 function App() {
-  const [form, setForm] = useState(initialForm)
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [messageType, setMessageType] = useState('')
+  const [eventosSalvos, setEventosSalvos] = useState(eventosModelo)
+  const [busca, setBusca] = useState('')
+  const [carregando, setCarregando] = useState(true)
+  const [mensagem, setMensagem] = useState('')
 
-  function handleChange(event) {
-    const { name, type, checked, value } = event.target
+  useEffect(() => {
+    async function carregarEventosSalvos() {
+      const token = obterToken()
 
-    setForm((currentForm) => ({
-      ...currentForm,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setIsLoading(true)
-    setMessage('')
-    setMessageType('')
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('E-mail ou senha inválidos.')
+      if (!token) {
+        setCarregando(false)
+        setMensagem('Entre na sua conta para sincronizar seus eventos salvos.')
+        return
       }
 
-      const data = await response.json()
-      const storage = form.remember ? localStorage : sessionStorage
+      try {
+        const resposta = await fetch('/api/saved-events', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
-      storage.setItem('eventhub.token', data.token)
-      storage.setItem('eventhub.tokenType', data.tokenType)
-      storage.setItem('eventhub.user', JSON.stringify(data.user))
+        if (!resposta.ok) {
+          throw new Error('Não foi possível carregar os eventos salvos.')
+        }
 
-      setMessage(`Bem-vindo de volta, ${data.user?.name ?? 'usuário'}!`)
-      setMessageType('success')
+        const dados = await resposta.json()
+
+        if (dados.length > 0) {
+          setEventosSalvos(dados.map(normalizarEvento))
+          setMensagem('')
+        } else {
+          setEventosSalvos([])
+          setMensagem('Você ainda não salvou nenhum evento.')
+        }
+      } catch (error) {
+        setMensagem(`${error.message} Exibindo uma prévia local.`)
+      } finally {
+        setCarregando(false)
+      }
+    }
+
+    carregarEventosSalvos()
+  }, [])
+
+  const eventosFiltrados = useMemo(() => {
+    const termo = busca.trim().toLowerCase()
+
+    if (!termo) {
+      return eventosSalvos
+    }
+
+    return eventosSalvos.filter((evento) => {
+      return [evento.title, evento.category, evento.location].some((valor) =>
+        valor?.toLowerCase().includes(termo),
+      )
+    })
+  }, [busca, eventosSalvos])
+
+  async function removerEvento(eventId) {
+    const token = obterToken()
+
+    setEventosSalvos((eventosAtuais) =>
+      eventosAtuais.filter((evento) => evento.eventId !== eventId),
+    )
+
+    if (!token) {
+      setMensagem('Evento removido da visualização local.')
+      return
+    }
+
+    try {
+      const resposta = await fetch(`/api/saved-events/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!resposta.ok) {
+        throw new Error('Não foi possível remover o evento salvo.')
+      }
+
+      setMensagem('Evento removido dos salvos.')
     } catch (error) {
-      setMessage(error.message || 'Não foi possível entrar agora.')
-      setMessageType('error')
-    } finally {
-      setIsLoading(false)
+      setMensagem(error.message)
+    }
+  }
+
+  async function registrarEvento(eventId) {
+    const token = obterToken()
+
+    if (!token) {
+      setMensagem('Entre na sua conta para se registrar neste evento.')
+      return
+    }
+
+    try {
+      const resposta = await fetch(`/api/registrations/${eventId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!resposta.ok) {
+        throw new Error('Não foi possível concluir o registro.')
+      }
+
+      setMensagem('Registro realizado com sucesso.')
+    } catch (error) {
+      setMensagem(error.message)
     }
   }
 
   return (
-    <main className="login-page">
-      <section className="brand-panel" aria-label="EventHub">
-        <div className="brand-content">
-          <a className="brand-mark" href="/" aria-label="Página inicial do EventHub">
-            <span className="brand-icon" aria-hidden="true">
-              <span />
-            </span>
-            EventHub
+    <main className="saved-events-page">
+      <header className="topbar">
+        <a className="app-logo" href="/" aria-label="Página inicial do EventHub">
+          EventHub
+        </a>
+
+        <nav className="main-nav" aria-label="Navegação principal">
+          <a href="/eventos">Descobrir</a>
+          <a className="active" href="/eventos-salvos">
+            Gerenciar
           </a>
-
-          <div className="brand-copy">
-            <h1>Precisão no planejamento. Excelência na execução.</h1>
-            <p>
-              Acesse a plataforma para gerenciamento de eventos de alta importância. Coordene a logística, gerencie participantes e acompanhe cada detalhe com total clareza e facilidade.
-            </p>
-          </div>
-
-          <dl className="brand-metrics" aria-label="Métricas do EventHub">
-            <div>
-              <dt>10k+</dt>
-              <dd>Eventos gerenciados</dd>
-            </div>
-            <div>
-              <dt>99.9%</dt>
-              <dd>Disponibilidade</dd>
-            </div>
-          </dl>
-        </div>
-
-        <p className="brand-footer">© 2026 EventHub. Precisão no planejamento.</p>
-      </section>
-
-      <section className="auth-panel" aria-labelledby="login-title">
-        <div className="auth-card">
-          <div className="auth-heading">
-            <h2 id="login-title">Bem-vindo de volta</h2>
-            <p>Digite suas credenciais para acessar seu painel.</p>
-          </div>
-
-          <form className="login-form" onSubmit={handleSubmit}>
-            <label className="field">
-              <span>E-mail</span>
-              <input
-                autoComplete="email"
-                name="email"
-                onChange={handleChange}
-                placeholder="name@company.com"
-                required
-                type="email"
-                value={form.email}
-              />
-            </label>
-
-            <label className="field">
-              <span className="field-row">
-                Senha
-                <a href="/forgot-password">Esqueceu a senha?</a>
-              </span>
-              <span className="password-control">
-                <input
-                  autoComplete="current-password"
-                  name="password"
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  required
-                  type={showPassword ? 'text' : 'password'}
-                  value={form.password}
-                />
-                <button
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                  className="icon-button"
-                  onClick={() => setShowPassword((visible) => !visible)}
-                  type="button"
-                >
-                  <span className={showPassword ? 'eye-icon is-hidden' : 'eye-icon'} />
-                </button>
-              </span>
-            </label>
-
-            <label className="checkbox-field">
-              <input
-                checked={form.remember}
-                name="remember"
-                onChange={handleChange}
-                type="checkbox"
-              />
-              <span>Manter conectado por 30 dias</span>
-            </label>
-
-            {message && (
-              <p className={`form-message ${messageType}`} role="status">
-                {message}
-              </p>
-            )}
-
-            <button className="submit-button" disabled={isLoading} type="submit">
-              {isLoading ? 'Entrando...' : 'Entrar'}
-            </button>
-          </form>
-
-          <div className="divider">
-            <span>Ou continue com</span>
-          </div>
-
-          <div className="provider-actions">
-            <button type="button">
-              <span className="google-icon" aria-hidden="true" />
-              Google
-            </button>
-            <button type="button">
-              <span className="briefcase-icon" aria-hidden="true" />
-              Acesso SSO
-            </button>
-          </div>
-
-          <p className="request-access">
-            Não tem uma conta? <a href="/request-access">Solicitar acesso</a>
-          </p>
-        </div>
-
-        <nav className="legal-links" aria-label="Links legais">
-          <a href="/privacy">Privacidade</a>
-          <a href="/terms">Termos</a>
-          <a href="/support">Suporte</a>
         </nav>
+
+        <label className="search-box">
+          <span className="search-icon" aria-hidden="true" />
+          <input
+            aria-label="Buscar eventos salvos"
+            onChange={(event) => setBusca(event.target.value)}
+            placeholder="Buscar eventos..."
+            type="search"
+            value={busca}
+          />
+        </label>
+
+        <span className="topbar-divider" />
+        <div className="avatar" aria-label="Perfil do usuário" />
+      </header>
+
+      <section className="page-shell">
+        <div className="breadcrumb" aria-label="Caminho da página">
+          <a href="/dashboard">Painel</a>
+          <span aria-hidden="true">›</span>
+          <span>Eventos salvos</span>
+        </div>
+
+        <div className="page-heading">
+          <h1>Eventos Salvos</h1>
+          <p>Gerencie os eventos que você marcou para acompanhar depois.</p>
+        </div>
+
+        {mensagem && <p className="status-message">{mensagem}</p>}
+
+        {carregando ? (
+          <p className="loading-message">Carregando eventos salvos...</p>
+        ) : (
+          <section className="events-grid" aria-label="Lista de eventos salvos">
+            {eventosFiltrados.map((evento, indice) => (
+              <EventCard
+                evento={evento}
+                key={evento.eventId}
+                onRegister={registrarEvento}
+                onRemove={removerEvento}
+                priority={indice}
+              />
+            ))}
+          </section>
+        )}
       </section>
+
+      <footer className="page-footer">
+        <strong>EventHub</strong>
+        <span>© 2026 EventHub. Precisão no planejamento.</span>
+        <nav aria-label="Links legais">
+          <a href="/privacidade">Privacidade</a>
+          <a href="/termos">Termos</a>
+          <a href="/suporte">Suporte</a>
+          <a href="/contato">Contato</a>
+        </nav>
+      </footer>
     </main>
+  )
+}
+
+function EventCard({ evento, onRegister, onRemove, priority }) {
+  const isFeatured = evento.variant === 'featured'
+  const isWide = evento.variant === 'wide'
+  const cardClass = ['event-card', isFeatured && 'featured', isWide && 'wide']
+    .filter(Boolean)
+    .join(' ')
+
+  return (
+    <article className={cardClass}>
+      <div className={`event-media ${evento.visual}`}>
+        {isFeatured && <img alt="" src={heroImage} />}
+        {evento.tag && <span className="event-tag">{evento.tag}</span>}
+        <button
+          aria-label={`Remover ${evento.title} dos salvos`}
+          className="bookmark-button"
+          onClick={() => onRemove(evento.eventId)}
+          type="button"
+        >
+          <span aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="event-content">
+        <div className="event-main">
+          <p className="event-category">{evento.category}</p>
+          <h2>{evento.title}</h2>
+          {isWide && <p className="event-description">{evento.description}</p>}
+        </div>
+
+        {isFeatured ? (
+          <div className="featured-date">
+            <strong>{formatarData(evento.startAt).replace(' de ', ' ')}</strong>
+            <span>{evento.location}</span>
+          </div>
+        ) : (
+          <div className="event-meta">
+            <span className="calendar-icon" aria-hidden="true" />
+            {isWide ? formatarPeriodo(evento.startAt, evento.endAt) : formatarData(evento.startAt)}
+          </div>
+        )}
+
+        {isWide && (
+          <div className="event-place">
+            <span className="pin-icon" aria-hidden="true" />
+            {evento.location}
+          </div>
+        )}
+
+        <div className="event-actions">
+          {isFeatured && (
+            <div className="attendees" aria-label={`${priority + 42} participantes interessados`}>
+              <span />
+              <span />
+              <small>+42</small>
+            </div>
+          )}
+          <button className="text-action" onClick={() => onRemove(evento.eventId)} type="button">
+            Remover
+          </button>
+          <button className="outline-action" onClick={() => onRegister(evento.eventId)} type="button">
+            {isFeatured || priority % 2 === 0 ? 'Ver detalhes' : 'Registrar'}
+          </button>
+        </div>
+      </div>
+    </article>
   )
 }
 
