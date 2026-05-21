@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="Cozinha corporativa preparada para dia de bem-estar">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0d756f"/>
+      <stop offset=".5" stop-color="#d9eee4"/>
+      <stop offset="1" stop-color="#f9fafb"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#bg)"/>
+  <path d="M0 0h800v112H0z" fill="#dce5e0"/>
+  <g fill="#c5d0d0">
+    <rect x="40" y="28" width="150" height="62"/><rect x="214" y="28" width="150" height="62"/><rect x="388" y="28" width="150" height="62"/><rect x="562" y="28" width="150" height="62"/>
+  </g>
+  <path d="M110 190h570v150H110z" fill="#c8d0d0"/>
+  <path d="M140 170h510v44H140z" fill="#eff5f2"/>
+  <path d="M160 214h120v96H160zm174 0h120v96H334zm174 0h120v96H508z" fill="#8d999e"/>
+  <g fill="#51a35d">
+    <ellipse cx="230" cy="156" rx="34" ry="14"/><ellipse cx="256" cy="160" rx="28" ry="12"/><ellipse cx="204" cy="162" rx="26" ry="12"/>
+    <ellipse cx="474" cy="158" rx="34" ry="14"/><ellipse cx="500" cy="162" rx="28" ry="12"/><ellipse cx="448" cy="164" rx="26" ry="12"/>
+  </g>
+  <g stroke="#334155" stroke-width="7" stroke-linecap="round">
+    <path d="M610 108v64M636 108v64M662 108v64"/>
+  </g>
+  <path d="M0 340h800v80H0z" fill="#e8efef"/>
+</svg>

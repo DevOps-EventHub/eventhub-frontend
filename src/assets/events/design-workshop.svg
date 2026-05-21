@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="Sala clara de workshop de design">
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1">
+      <stop offset="0" stop-color="#eef3f6"/>
+      <stop offset=".65" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d6e0e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#wall)"/>
+  <rect x="62" y="24" width="500" height="258" fill="#dfe9ec"/>
+  <g fill="#f9fcfd" stroke="#afbec7" stroke-width="5">
+    <rect x="92" y="40" width="130" height="220"/>
+    <rect x="232" y="40" width="130" height="220"/>
+    <rect x="372" y="40" width="160" height="220"/>
+  </g>
+  <path d="M0 282h800v138H0z" fill="#eef2f4"/>
+  <path d="M0 332h800v88H0z" fill="#dde4e8"/>
+  <g fill="#97a5ad">
+    <rect x="118" y="272" width="128" height="16"/><rect x="135" y="288" width="12" height="42"/><rect x="216" y="288" width="12" height="42"/>
+    <rect x="298" y="272" width="128" height="16"/><rect x="315" y="288" width="12" height="42"/><rect x="396" y="288" width="12" height="42"/>
+    <rect x="478" y="272" width="128" height="16"/><rect x="495" y="288" width="12" height="42"/><rect x="576" y="288" width="12" height="42"/>
+  </g>
+  <g fill="#334155">
+    <rect x="126" y="242" width="92" height="30" rx="5"/>
+    <rect x="306" y="242" width="92" height="30" rx="5"/>
+    <rect x="486" y="242" width="92" height="30" rx="5"/>
+  </g>
+  <circle cx="664" cy="116" r="34" fill="#0b2f6f" opacity=".13"/>
+  <path d="M640 116h48M664 92v48" stroke="#0b2f6f" stroke-width="8" stroke-linecap="round"/>
+</svg>

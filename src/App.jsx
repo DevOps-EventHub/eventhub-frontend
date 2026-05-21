@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import heroImage from './assets/hero.png'
+import designWorkshopImage from './assets/events/design-workshop.svg'
+import futureCitiesImage from './assets/events/future-cities-expo.svg'
+import networkingGalaImage from './assets/events/networking-gala.svg'
+import saasFounderImage from './assets/events/saas-founder-meetup.svg'
+import strategyRetreatImage from './assets/events/strategy-retreat.svg'
+import techSummitImage from './assets/events/tech-summit.svg'
+import wellnessDayImage from './assets/events/wellness-day.svg'
 import './App.css'
 
 const eventosModelo = [
@@ -13,6 +19,7 @@ const eventosModelo = [
     tag: 'Ao vivo em breve',
     variant: 'featured',
     visual: 'summit',
+    image: techSummitImage,
   },
   {
     eventId: 2,
@@ -23,6 +30,7 @@ const eventosModelo = [
     description: 'Práticas para organizar componentes, tokens e governança visual.',
     variant: 'compact',
     visual: 'workshop',
+    image: designWorkshopImage,
   },
   {
     eventId: 3,
@@ -33,6 +41,7 @@ const eventosModelo = [
     description: 'Encontro executivo para relacionamento e novas oportunidades.',
     variant: 'compact',
     visual: 'gala',
+    image: networkingGalaImage,
   },
   {
     eventId: 4,
@@ -44,6 +53,7 @@ const eventosModelo = [
     description: 'Sessão profunda de planejamento para diretores regionais e líderes.',
     variant: 'wide',
     visual: 'strategy',
+    image: strategyRetreatImage,
   },
   {
     eventId: 5,
@@ -54,6 +64,7 @@ const eventosModelo = [
     description: 'Experiências práticas para saúde, foco e cultura organizacional.',
     variant: 'compact',
     visual: 'wellness',
+    image: wellnessDayImage,
   },
   {
     eventId: 6,
@@ -64,6 +75,7 @@ const eventosModelo = [
     description: 'Mostra de soluções urbanas, mobilidade e tecnologia sustentável.',
     variant: 'compact',
     visual: 'expo',
+    image: futureCitiesImage,
   },
   {
     eventId: 7,
@@ -74,6 +86,7 @@ const eventosModelo = [
     description: 'Conversas práticas sobre crescimento, produto e captação.',
     variant: 'compact',
     visual: 'startup',
+    image: saasFounderImage,
   },
 ]
 
@@ -324,7 +337,7 @@ function EventCard({ evento, onRegister, onRemove, priority }) {
   return (
     <article className={cardClass}>
       <div className={`event-media ${evento.visual}`}>
-        {isFeatured && <img alt="" src={heroImage} />}
+        <img alt={`Imagem do evento ${evento.title}`} src={evento.image} />
         {evento.tag && <span className="event-tag">{evento.tag}</span>}
         <button
           aria-label={`Remover ${evento.title} dos salvos`}
