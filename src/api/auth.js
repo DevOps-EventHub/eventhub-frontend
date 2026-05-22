@@ -27,3 +27,10 @@ export function login(email, password) {
 export function me() {
   return requestJson('/api/auth/me');
 }
+
+export async function logout() {
+  await fetch(`${API_BASE}/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+}
