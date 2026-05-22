@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import PropTypes from 'prop-types';
 import { EventCard } from '../components/EventCard.jsx';
 import {
   atualizarEvento,
@@ -129,8 +130,25 @@ export function ManageEventsPage({ isAdmin }) {
       </section>
 
       {isAdmin && editForm && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <section className="manage-edit-modal" onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="modal-overlay"
+          aria-label="Fechar modal de edicao"
+          onClick={handleCloseModal}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCloseModal();
+            }
+          }}
+        >
+          <section
+            className="manage-edit-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Editar evento salvo"
+            onClick={(e) => e.stopPropagation()}
+          >
             <header className="manage-edit-modal-header">
               <h3>Editar evento salvo</h3>
               <button type="button" className="manage-close-button" onClick={handleCloseModal} aria-label="Fechar modal">
@@ -168,9 +186,12 @@ export function ManageEventsPage({ isAdmin }) {
               </ul>
             </section>
           </section>
-        </div>
+        </button>
       )}
     </main>
   );
 }
 
+ManageEventsPage.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+};

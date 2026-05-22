@@ -1,5 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Grid2X2, List, Plus } from 'lucide-react';
+import PropTypes from 'prop-types';
 import {
   criarCategoria,
   criarEvento,
@@ -228,3 +229,8 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
   );
 }
 
+DiscoverPage.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+  openCreateModal: PropTypes.bool.isRequired,
+  onOpenCreateModalChange: PropTypes.func.isRequired,
+};

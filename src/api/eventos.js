@@ -1,9 +1,14 @@
 ﻿const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 async function buscarJson(caminho, options = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (options.headers) {
+    Object.assign(headers, options.headers);
+  }
+
   const resposta = await fetch(`${API_BASE}${caminho}`, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(options.headers ?? {}) },
+    headers,
     ...options,
   });
 

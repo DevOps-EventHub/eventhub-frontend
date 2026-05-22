@@ -1,4 +1,5 @@
 ﻿import { MapPin, Search } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 export function SearchFilters({ searchTerm, searchLocation, onSearchTermChange, onSearchLocationChange }) {
   return (
@@ -27,3 +28,10 @@ export function SearchFilters({ searchTerm, searchLocation, onSearchTermChange, 
     </div>
   );
 }
+
+SearchFilters.propTypes = {
+  searchTerm: PropTypes.string.isRequired,
+  searchLocation: PropTypes.string.isRequired,
+  onSearchTermChange: PropTypes.func.isRequired,
+  onSearchLocationChange: PropTypes.func.isRequired,
+};
