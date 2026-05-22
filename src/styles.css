@@ -168,7 +168,7 @@ h1 {
   border: 1px solid #c1cad9;
   border-radius: 8px;
   background: #eef3fb;
-  color: #6b7280;
+  color: #4b5563;
 }
 
 .campo-busca input {
@@ -549,7 +549,7 @@ footer strong {
 
 footer span,
 footer a {
-  color: #4f5666;
+  color: #374151;
   font-size: 14px;
 }
 
@@ -732,7 +732,7 @@ footer nav {
 }
 
 .login-mini-footer a {
-  color: #7b8392;
+  color: #4b5563;
   font-size: 0.86rem;
 }
 
@@ -932,4 +932,6 @@ footer nav {
   margin: 6px 0;
   color: #1f2940;
 }
+
+
 

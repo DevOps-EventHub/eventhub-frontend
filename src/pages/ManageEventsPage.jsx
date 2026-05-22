@@ -130,24 +130,19 @@ export function ManageEventsPage({ isAdmin }) {
       </section>
 
       {isAdmin && editForm && (
-        <button
-          type="button"
+        <dialog
           className="modal-overlay"
-          aria-label="Fechar modal de edicao"
-          onClick={handleCloseModal}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
+          open
+          aria-label="Modal de edicao"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
               handleCloseModal();
             }
           }}
         >
           <section
             className="manage-edit-modal"
-            role="dialog"
-            aria-modal="true"
             aria-label="Editar evento salvo"
-            onClick={(e) => e.stopPropagation()}
           >
             <header className="manage-edit-modal-header">
               <h3>Editar evento salvo</h3>
@@ -186,7 +181,7 @@ export function ManageEventsPage({ isAdmin }) {
               </ul>
             </section>
           </section>
-        </button>
+        </dialog>
       )}
     </main>
   );

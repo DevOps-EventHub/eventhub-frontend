@@ -1,12 +1,29 @@
 ﻿const API_BASE = import.meta.env.VITE_API_URL ?? '';
+const API_PREFIX = '/api/';
+
+function normalizarCaminho(caminho) {
+  if (typeof caminho !== 'string' || !caminho.startsWith(API_PREFIX)) {
+    throw new Error('Caminho de API invalido.');
+  }
+  return caminho;
+}
+
+function validarEventId(eventId) {
+  const parsed = Number(eventId);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    throw new Error('Identificador de evento invalido.');
+  }
+  return String(parsed);
+}
 
 async function buscarJson(caminho, options = {}) {
+  const caminhoSeguro = normalizarCaminho(caminho);
   const headers = { 'Content-Type': 'application/json' };
   if (options.headers) {
     Object.assign(headers, options.headers);
   }
 
-  const resposta = await fetch(`${API_BASE}${caminho}`, {
+  const resposta = await fetch(`${API_BASE}${caminhoSeguro}`, {
     credentials: 'include',
     headers,
     ...options,
@@ -37,10 +54,22 @@ export async function listarEventos({ termo = '', categoria = '', status = '', l
 }
 
 export async function criarEvento(payload) { return buscarJson('/api/events', { method: 'POST', body: JSON.stringify(payload) }); }
-export async function atualizarEvento(eventId, payload) { return buscarJson(`/api/events/${eventId}`, { method: 'PUT', body: JSON.stringify(payload) }); }
+export async function atualizarEvento(eventId, payload) {
+  const safeEventId = validarEventId(eventId);
+  return buscarJson(`/api/events/${safeEventId}`, { method: 'PUT', body: JSON.stringify(payload) });
+}
 export async function listarCategorias() { return buscarJson('/api/categories'); }
 export async function criarCategoria(payload) { return buscarJson('/api/categories', { method: 'POST', body: JSON.stringify(payload) }); }
-export async function salvarEvento(eventId) { return buscarJson(`/api/saved-events/${eventId}`, { method: 'POST' }); }
-export async function removerEventoSalvo(eventId) { return buscarJson(`/api/saved-events/${eventId}`, { method: 'DELETE' }); }
+export async function salvarEvento(eventId) {
+  const safeEventId = validarEventId(eventId);
+  return buscarJson(`/api/saved-events/${safeEventId}`, { method: 'POST' });
+}
+export async function removerEventoSalvo(eventId) {
+  const safeEventId = validarEventId(eventId);
+  return buscarJson(`/api/saved-events/${safeEventId}`, { method: 'DELETE' });
+}
 export async function listarEventosSalvos() { return buscarJson('/api/saved-events'); }
-export async function listarParticipantesEventoSalvo(eventId) { return buscarJson(`/api/saved-events/event/${eventId}/participants`); }
+export async function listarParticipantesEventoSalvo(eventId) {
+  const safeEventId = validarEventId(eventId);
+  return buscarJson(`/api/saved-events/event/${safeEventId}/participants`);
+}
