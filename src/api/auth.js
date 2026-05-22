@@ -1,12 +1,14 @@
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 async function requestJson(path, options = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (options.headers) {
+    Object.assign(headers, options.headers);
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers ?? {}),
-    },
+    headers,
     ...options,
   });
 

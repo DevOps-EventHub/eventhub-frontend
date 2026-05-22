@@ -1,4 +1,5 @@
 ﻿import { Plus } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 function getInitial(name) {
   const trimmed = (name ?? '').trim();
@@ -9,10 +10,10 @@ function getInitial(name) {
 export function AppHeader({ activeTab, onTabChange, isAdmin, user, onLogout, onCreateEvent }) {
   return (
     <header className="topo">
-      <a className="marca" href="#">EventHub</a>
+      <button type="button" className="marca" onClick={() => onTabChange('discover')}>EventHub</button>
       <nav aria-label="Navegacao principal">
-        <a className={activeTab === 'discover' ? 'ativo' : ''} href="#" onClick={() => onTabChange('discover')}>Descobrir</a>
-        <a className={activeTab === 'manage' ? 'ativo' : ''} href="#" onClick={() => onTabChange('manage')}>Gerenciar</a>
+        <button type="button" className={activeTab === 'discover' ? 'ativo' : ''} onClick={() => onTabChange('discover')}>Descobrir</button>
+        <button type="button" className={activeTab === 'manage' ? 'ativo' : ''} onClick={() => onTabChange('manage')}>Gerenciar</button>
       </nav>
       <div className="acoes-topo">
         {isAdmin && activeTab === 'discover' && <button className="botao-criar" onClick={onCreateEvent}><Plus size={18} />Criar Evento</button>}
@@ -22,3 +23,18 @@ export function AppHeader({ activeTab, onTabChange, isAdmin, user, onLogout, onC
     </header>
   );
 }
+
+AppHeader.propTypes = {
+  activeTab: PropTypes.string.isRequired,
+  onTabChange: PropTypes.func.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }),
+  onLogout: PropTypes.func.isRequired,
+  onCreateEvent: PropTypes.func.isRequired,
+};
+
+AppHeader.defaultProps = {
+  user: null,
+};

@@ -52,6 +52,9 @@ a {
 }
 
 .marca {
+  border: 0;
+  background: transparent;
+  padding: 0;
   color: #06136c;
   font-size: 23px;
   font-weight: 800;
@@ -63,12 +66,14 @@ a {
   color: #2f3445;
 }
 
-.topo nav a {
+.topo nav a,
+.topo nav button {
   padding: 24px 0 19px;
   border-bottom: 2px solid transparent;
 }
 
-.topo nav a.ativo {
+.topo nav a.ativo,
+.topo nav button.ativo {
   color: #06136c;
   border-color: #06136c;
 }
@@ -927,3 +932,4 @@ footer nav {
   margin: 6px 0;
   color: #1f2940;
 }
+

@@ -1,4 +1,5 @@
 ﻿import { CalendarDays, MapPin, Pencil } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 function formatDate(value) {
   return new Date(value).toLocaleDateString('en-US', {
@@ -66,3 +67,26 @@ export function EventCard({
     </article>
   );
 }
+
+EventCard.propTypes = {
+  mode: PropTypes.oneOf(['discover', 'saved']),
+  event: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    category: PropTypes.string,
+    location: PropTypes.string.isRequired,
+    startAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
+    status: PropTypes.string,
+  }).isRequired,
+  imageUrl: PropTypes.string,
+  footerLabel: PropTypes.string.isRequired,
+  onPrimaryAction: PropTypes.func.isRequired,
+  primaryActionLabel: PropTypes.string.isRequired,
+  onEdit: PropTypes.func,
+};
+
+EventCard.defaultProps = {
+  mode: 'discover',
+  imageUrl: '',
+  onEdit: undefined,
+};

@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export function LoginPage({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -71,3 +72,7 @@ export function LoginPage({ onLogin }) {
     </main>
   );
 }
+
+LoginPage.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+};
