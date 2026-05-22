@@ -5,7 +5,14 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY . .
+COPY src ./src
+COPY public ./public
+COPY index.html ./
+COPY vite.config.js ./
+COPY eslint.config.js ./
+
+RUN chown -R node:node /app
+USER node
 
 EXPOSE 5173
 

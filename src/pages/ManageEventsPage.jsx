@@ -139,6 +139,11 @@ export function ManageEventsPage({ isAdmin }) {
               handleCloseModal();
             }
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              handleCloseModal();
+            }
+          }}
         >
           <section
             className="manage-edit-modal"
