@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { EventCard } from '../components/EventCard.jsx';
 import {
   atualizarEvento,
+  deletarEvento,
   listarCategorias,
+  listarEventos,
   listarEventosSalvos,
   listarParticipantesEventoSalvo,
   removerEventoSalvo,
@@ -25,6 +27,12 @@ export function ManageEventsPage({ isAdmin }) {
   const [error, setError] = useState('');
 
   async function loadSavedEvents() {
+    if (isAdmin) {
+      const response = await listarEventos({ pagina: 0, tamanho: 100 });
+      setSavedEvents(response?.content ?? []);
+      return;
+    }
+
     const response = await listarEventosSalvos();
     setSavedEvents(response ?? []);
   }
@@ -44,10 +52,11 @@ export function ManageEventsPage({ isAdmin }) {
   }, []);
 
   async function handleOpenEditModal(event) {
+    const selectedEventId = event.eventId ?? event.id;
     setSelectedEvent(event);
     const categoryId = categories.find((c) => c.name === event.category)?.id ?? '';
     setEditForm({
-      id: event.eventId,
+      id: selectedEventId,
       title: event.title,
       description: event.description ?? '',
       categoryId,
@@ -60,7 +69,7 @@ export function ManageEventsPage({ isAdmin }) {
 
     if (isAdmin) {
       try {
-        const participantResponse = await listarParticipantesEventoSalvo(event.eventId);
+        const participantResponse = await listarParticipantesEventoSalvo(selectedEventId);
         setParticipants(participantResponse ?? []);
       } catch {
         setParticipants([]);
@@ -86,6 +95,18 @@ export function ManageEventsPage({ isAdmin }) {
     }
   }
 
+  async function handleDelete(eventId) {
+    try {
+      await deletarEvento(eventId);
+      setSavedEvents((prev) => prev.filter((item) => item.eventId !== eventId && item.id !== eventId));
+      if ((selectedEvent?.eventId ?? selectedEvent?.id) === eventId) {
+        handleCloseModal();
+      }
+    } catch (e) {
+      setError(e.message || 'Falha ao excluir evento.');
+    }
+  }
+
   async function handleUpdate(e) {
     e.preventDefault();
     if (!isAdmin || !editForm) return;
@@ -108,21 +129,24 @@ export function ManageEventsPage({ isAdmin }) {
   return (
     <main>
       <section className="cabecalho-busca">
-        <h1>Gerenciar eventos salvos</h1>
+        <h1>Gerenciar eventos</h1>
       </section>
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 
       <section className="grade-eventos">
+        {!isAdmin && savedEvents.length === 0 && (
+          <p>Seus eventos salvos aparecerão aqui.</p>
+        )}
         {savedEvents.map((event) => (
-          <div key={event.eventId}>
+          <div key={event.eventId ?? event.id}>
             <EventCard
               mode="saved"
               event={event}
-              imageUrl={event.imageUrl || eventImages[event.eventId]}
+              imageUrl={event.imageUrl || eventImages[event.eventId ?? event.id]}
               footerLabel="Evento salvo"
-              primaryActionLabel="Cancelar"
-              onPrimaryAction={() => handleUnsave(event.eventId)}
+              primaryActionLabel={isAdmin ? 'Excluir' : 'Cancelar'}
+              onPrimaryAction={() => (isAdmin ? handleDelete(event.id) : handleUnsave(event.eventId))}
               onEdit={isAdmin ? () => handleOpenEditModal(event) : undefined}
             />
           </div>
@@ -176,7 +200,7 @@ export function ManageEventsPage({ isAdmin }) {
             </form>
 
             <section className="manage-participants">
-              <h4>Usuários que salvaram este evento</h4>
+              <h4>Usuários que salvaram este evento:</h4>
               <ul>
                 {participants.map((p) => (
                   <li key={`${p.userId}-${p.savedAt}`}>

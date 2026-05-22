@@ -58,6 +58,10 @@ export async function atualizarEvento(eventId, payload) {
   const safeEventId = validarEventId(eventId);
   return buscarJson(`/api/events/${safeEventId}`, { method: 'PUT', body: JSON.stringify(payload) });
 }
+export async function deletarEvento(eventId) {
+  const safeEventId = validarEventId(eventId);
+  return buscarJson(`/api/events/${safeEventId}`, { method: 'DELETE' });
+}
 export async function listarCategorias() { return buscarJson('/api/categories'); }
 export async function criarCategoria(payload) { return buscarJson('/api/categories', { method: 'POST', body: JSON.stringify(payload) }); }
 export async function salvarEvento(eventId) {
