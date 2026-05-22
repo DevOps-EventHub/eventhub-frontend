@@ -1,4 +1,4 @@
-export const categoriasExemplo = [
+﻿export const categoriasExemplo = [
   { id: 1, name: 'Tecnologia', description: 'Eventos sobre software, IA e produtos digitais' },
   { id: 2, name: 'Design', description: 'Experiencias, pesquisa e estrategia de produto' },
   { id: 3, name: 'Networking', description: 'Encontros profissionais e comunidades' },
@@ -16,7 +16,7 @@ export const eventosExemplo = [
     startAt: '2026-08-24T09:00:00-03:00',
     endAt: '2026-08-24T18:00:00-03:00',
     capacity: 420,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const eventosExemplo = [
     startAt: '2026-09-12T14:00:00-03:00',
     endAt: '2026-09-12T17:00:00-03:00',
     capacity: 120,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const eventosExemplo = [
     startAt: '2026-10-05T19:00:00-03:00',
     endAt: '2026-10-05T22:30:00-03:00',
     capacity: 80,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 4,
@@ -49,7 +49,7 @@ export const eventosExemplo = [
     startAt: '2026-11-15T10:00:00-03:00',
     endAt: '2026-11-15T19:00:00-03:00',
     capacity: 600,
-    status: 'DRAFT',
+    status: 'RASCUNHO',
   },
   {
     id: 5,
@@ -60,7 +60,7 @@ export const eventosExemplo = [
     startAt: '2026-12-10T08:30:00-03:00',
     endAt: '2026-12-10T16:00:00-03:00',
     capacity: 260,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ export const eventosExemplo = [
     startAt: '2026-08-30T09:30:00-03:00',
     endAt: '2026-08-30T18:00:00-03:00',
     capacity: 350,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 7,
@@ -82,7 +82,7 @@ export const eventosExemplo = [
     startAt: '2026-09-22T13:00:00-03:00',
     endAt: '2026-09-22T18:00:00-03:00',
     capacity: 90,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 8,
@@ -93,7 +93,7 @@ export const eventosExemplo = [
     startAt: '2026-10-18T08:00:00-03:00',
     endAt: '2026-10-18T11:30:00-03:00',
     capacity: 70,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 9,
@@ -104,7 +104,7 @@ export const eventosExemplo = [
     startAt: '2026-11-28T09:00:00-03:00',
     endAt: '2026-11-28T17:30:00-03:00',
     capacity: 480,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 10,
@@ -115,7 +115,7 @@ export const eventosExemplo = [
     startAt: '2026-12-14T10:00:00-03:00',
     endAt: '2026-12-14T16:30:00-03:00',
     capacity: 180,
-    status: 'DRAFT',
+    status: 'RASCUNHO',
   },
   {
     id: 11,
@@ -126,7 +126,7 @@ export const eventosExemplo = [
     startAt: '2027-01-20T09:00:00-03:00',
     endAt: '2027-01-20T18:00:00-03:00',
     capacity: 520,
-    status: 'PUBLISHED',
+    status: 'PUBLICADO',
   },
   {
     id: 12,
@@ -137,6 +137,7 @@ export const eventosExemplo = [
     startAt: '2027-02-07T18:30:00-03:00',
     endAt: '2027-02-07T21:30:00-03:00',
     capacity: 110,
-    status: 'CANCELLED',
+    status: 'CANCELADO',
   },
 ];
+
