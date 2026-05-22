@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Reunião executiva estratégica em sala tecnológica">
+  <defs>
+    <linearGradient id="room" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07111d"/>
+      <stop offset=".6" stop-color="#17384b"/>
+      <stop offset="1" stop-color="#0a1624"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="url(#room)"/>
+  <path d="M40 52h720v268H40z" fill="#0c2435" stroke="#2d6378" stroke-width="4"/>
+  <path d="M80 96h250v130H80zm390 0h250v130H470z" fill="#165a72"/>
+  <g stroke="#8fe7ff" stroke-width="5" fill="none" opacity=".75">
+    <path d="M115 188h170M115 150l46-30 44 34 70-56"/>
+    <path d="M505 176h170M505 136h120M505 210h92"/>
+  </g>
+  <ellipse cx="400" cy="360" rx="260" ry="76" fill="#07111d"/>
+  <ellipse cx="400" cy="342" rx="260" ry="76" fill="#173349"/>
+  <path d="M190 342h420" stroke="#5ec4d8" stroke-width="3" opacity=".7"/>
+  <g fill="#0b1320">
+    <circle cx="210" cy="278" r="20"/><rect x="194" y="298" width="32" height="86" rx="13"/>
+    <circle cx="310" cy="304" r="20"/><rect x="294" y="324" width="32" height="88" rx="13"/>
+    <circle cx="405" cy="292" r="20"/><rect x="389" y="312" width="32" height="88" rx="13"/>
+    <circle cx="500" cy="304" r="20"/><rect x="484" y="324" width="32" height="88" rx="13"/>
+    <circle cx="590" cy="278" r="20"/><rect x="574" y="298" width="32" height="86" rx="13"/>
+  </g>
+</svg>

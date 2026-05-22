@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-label="Gala de networking com luzes douradas">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#120b08"/>
+      <stop offset=".58" stop-color="#4a2d16"/>
+      <stop offset="1" stop-color="#0b0908"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="5%" r="72%">
+      <stop offset="0" stop-color="#ffc85a" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#3b210d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#bg)"/>
+  <rect width="800" height="420" fill="url(#glow)"/>
+  <g stroke="#d9a044" stroke-width="2" opacity=".45">
+    <path d="M80 0v250M145 0v210M214 0v268M318 0v232M430 0v275M552 0v220M675 0v260"/>
+  </g>
+  <g fill="#ffd98a" opacity=".8">
+    <circle cx="88" cy="72" r="6"/><circle cx="188" cy="126" r="5"/><circle cx="330" cy="86" r="8"/><circle cx="518" cy="118" r="5"/><circle cx="662" cy="74" r="7"/>
+  </g>
+  <path d="M70 284h660v86H70z" fill="#d9c09b" opacity=".9"/>
+  <path d="M70 284c96-38 560-38 660 0" fill="#f5dcae" opacity=".85"/>
+  <g fill="#0f172a">
+    <circle cx="280" cy="216" r="16"/><rect x="268" y="232" width="24" height="70" rx="10"/>
+    <circle cx="330" cy="204" r="16"/><rect x="318" y="220" width="24" height="82" rx="10"/>
+    <circle cx="392" cy="218" r="16"/><rect x="380" y="234" width="24" height="68" rx="10"/>
+    <circle cx="462" cy="205" r="16"/><rect x="450" y="221" width="24" height="81" rx="10"/>
+    <circle cx="510" cy="218" r="16"/><rect x="498" y="234" width="24" height="68" rx="10"/>
+  </g>
+</svg>
