@@ -41,6 +41,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Test with coverage
+        run: npm run test:coverage
+
       - name: SonarCloud Scan
         if: ${{ env.SONAR_TOKEN != '' && env.SONAR_PROJECT_KEY != '' && env.SONAR_ORGANIZATION != '' }}
         uses: SonarSource/sonarqube-scan-action@v5
@@ -51,4 +54,8 @@ jobs:
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
             -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions=src/**/*.test.js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.coverage.exclusions=src/main.jsx,src/App.jsx,src/pages/**,src/components/**,src/assets/**,src/data/**
             -Dsonar.host.url=https://sonarcloud.io
