@@ -14,7 +14,10 @@ export default function App() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const { user, checking, restoreSession, signIn, signOut } = useAuth();
 
-  useEffect(() => { restoreSession(); }, []);
+  useEffect(() => {
+    restoreSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isAdmin = user?.roles?.includes('ROLE_ADMIN');
 

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { EventCard } from '../components/EventCard.jsx';
@@ -19,14 +19,22 @@ function toDateInput(value) {
 
 export function ManageEventsPage({ isAdmin }) {
   const [savedEvents, setSavedEvents] = useState([]);
-  const [eventImages, setEventImages] = useState({});
+  const [eventImages] = useState(() => {
+    try {
+      const raw = localStorage.getItem('eventhub_event_images');
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
   const [categories, setCategories] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [editForm, setEditForm] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [error, setError] = useState('');
+  const [confirmCancelEvent, setConfirmCancelEvent] = useState(null);
 
-  async function loadSavedEvents() {
+  const loadSavedEvents = useCallback(async () => {
     if (isAdmin) {
       const response = await listarEventos({ pagina: 0, tamanho: 100 });
       setSavedEvents(response?.content ?? []);
@@ -35,21 +43,24 @@ export function ManageEventsPage({ isAdmin }) {
 
     const response = await listarEventosSalvos();
     setSavedEvents(response ?? []);
-  }
+  }, [isAdmin]);
 
   useEffect(() => {
-    loadSavedEvents().catch((e) => setError(e.message));
-    listarCategorias().then(setCategories).catch(() => setCategories([]));
-  }, []);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem('eventhub_event_images');
-      setEventImages(raw ? JSON.parse(raw) : {});
-    } catch {
-      setEventImages({});
+    async function bootstrap() {
+      try {
+        await loadSavedEvents();
+      } catch (e) {
+        setError(e.message);
+      }
+      try {
+        const response = await listarCategorias();
+        setCategories(response);
+      } catch {
+        setCategories([]);
+      }
     }
-  }, []);
+    bootstrap();
+  }, [loadSavedEvents]);
 
   async function handleOpenEditModal(event) {
     const selectedEventId = event.eventId ?? event.id;
@@ -107,6 +118,12 @@ export function ManageEventsPage({ isAdmin }) {
     }
   }
 
+  async function handleConfirmCancel() {
+    if (!confirmCancelEvent?.id) return;
+    await handleDelete(confirmCancelEvent.id);
+    setConfirmCancelEvent(null);
+  }
+
   async function handleUpdate(e) {
     e.preventDefault();
     if (!isAdmin || !editForm) return;
@@ -145,13 +162,36 @@ export function ManageEventsPage({ isAdmin }) {
               event={event}
               imageUrl={event.imageUrl || eventImages[event.eventId ?? event.id]}
               footerLabel="Evento salvo"
-              primaryActionLabel={isAdmin ? 'Excluir' : 'Cancelar'}
-              onPrimaryAction={() => (isAdmin ? handleDelete(event.id) : handleUnsave(event.eventId))}
+              primaryActionLabel={isAdmin ? 'Cancelar evento' : 'Cancelar'}
+              onPrimaryAction={() => (isAdmin
+                ? setConfirmCancelEvent({ id: event.id, title: event.title })
+                : handleUnsave(event.eventId))}
               onEdit={isAdmin ? () => handleOpenEditModal(event) : undefined}
             />
           </div>
         ))}
       </section>
+
+      {isAdmin && confirmCancelEvent && (
+        <dialog className="modal-overlay" open aria-label="Confirmar cancelamento">
+          <section className="manage-edit-modal" aria-label="Confirmar cancelamento de evento">
+            <header className="manage-edit-modal-header">
+              <h3>Confirmar cancelamento</h3>
+            </header>
+            <p>
+              Deseja cancelar o evento <strong>{confirmCancelEvent.title}</strong>?
+            </p>
+            <div className="manage-edit-form">
+              <button type="button" className="manage-close-button" onClick={() => setConfirmCancelEvent(null)}>
+                Voltar
+              </button>
+              <button type="button" className="manage-save-button" onClick={handleConfirmCancel}>
+                Confirmar cancelamento
+              </button>
+            </div>
+          </section>
+        </dialog>
+      )}
 
       {isAdmin && editForm && (
         <dialog
@@ -219,3 +259,4 @@ export function ManageEventsPage({ isAdmin }) {
 ManageEventsPage.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
 };
+
