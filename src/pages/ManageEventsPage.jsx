@@ -198,15 +198,9 @@ export function ManageEventsPage({ isAdmin }) {
           className="modal-overlay"
           open
           aria-label="Modal de edicao"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleCloseModal();
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              handleCloseModal();
-            }
+          onCancel={(e) => {
+            e.preventDefault();
+            handleCloseModal();
           }}
         >
           <section
