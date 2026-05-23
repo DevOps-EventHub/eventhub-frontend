@@ -4,6 +4,9 @@ Tela principal em React para descobrir e gerenciar eventos, conectada aos endpoi
 
 ## Como rodar
 
+Vá para 
+https://github.com/DevOps-EventHub/eventhub-infra
+
 ```bash
 npm install
 npm run dev
