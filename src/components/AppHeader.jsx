@@ -10,7 +10,9 @@ function getInitial(name) {
 export function AppHeader({ activeTab, onTabChange, isAdmin, user, onLogout, onCreateEvent }) {
   return (
     <header className="topo">
-      <button type="button" className="marca" onClick={() => onTabChange('discover')}>EventHub</button>
+      <button type="button" className="marca brand-title" onClick={() => onTabChange('discover')}>
+        <span className="brand-main">Event</span><span className="brand-accent">Hub</span>
+      </button>
       <nav aria-label="Navegacao principal">
         <button type="button" className={activeTab === 'discover' ? 'ativo' : ''} onClick={() => onTabChange('discover')}>Descobrir</button>
         <button type="button" className={activeTab === 'manage' ? 'ativo' : ''} onClick={() => onTabChange('manage')}>Gerenciar</button>

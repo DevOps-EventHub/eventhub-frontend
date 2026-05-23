@@ -24,7 +24,7 @@ export function LoginPage({ onLogin }) {
     <main className="login-layout">
       <section className="login-hero">
         <div className="login-hero-content">
-          <strong className="login-brand">EventHub</strong>
+          <strong className="login-brand brand-title"><span className="brand-main">Event</span><span className="brand-accent">Hub</span></strong>
           <h1>Precisão no planejamento. Excelência na execução.</h1>
           <p>
             Acesse a plataforma mais intuitiva do mundo para gerenciamento de eventos de alto nível. Coordene a logística, gerencie os participantes e acompanhe cada detalhe com clareza e facilidade.

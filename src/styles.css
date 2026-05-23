@@ -55,9 +55,25 @@ a {
   border: 0;
   background: transparent;
   padding: 0;
-  color: #06136c;
+  color: #08248d;
   font-size: 23px;
   font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1em;
+  letter-spacing: -0.02em;
+}
+
+.brand-title {
+  color: #08248d;
+}
+
+.brand-main {
+  font-weight: 800;
+}
+
+.brand-accent {
+  font-weight: 700;
 }
 
 .topo nav {
