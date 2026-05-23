@@ -1,10 +1,12 @@
-﻿import { useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { EventCard } from '../components/EventCard.jsx';
 import {
   atualizarEvento,
+  deletarEvento,
   listarCategorias,
+  listarEventos,
   listarEventosSalvos,
   listarParticipantesEventoSalvo,
   removerEventoSalvo,
@@ -17,37 +19,55 @@ function toDateInput(value) {
 
 export function ManageEventsPage({ isAdmin }) {
   const [savedEvents, setSavedEvents] = useState([]);
-  const [eventImages, setEventImages] = useState({});
+  const [eventImages] = useState(() => {
+    try {
+      const raw = localStorage.getItem('eventhub_event_images');
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
   const [categories, setCategories] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [editForm, setEditForm] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [error, setError] = useState('');
+  const [confirmCancelEvent, setConfirmCancelEvent] = useState(null);
 
-  async function loadSavedEvents() {
+  const loadSavedEvents = useCallback(async () => {
+    if (isAdmin) {
+      const response = await listarEventos({ pagina: 0, tamanho: 100 });
+      setSavedEvents(response?.content ?? []);
+      return;
+    }
+
     const response = await listarEventosSalvos();
     setSavedEvents(response ?? []);
-  }
+  }, [isAdmin]);
 
   useEffect(() => {
-    loadSavedEvents().catch((e) => setError(e.message));
-    listarCategorias().then(setCategories).catch(() => setCategories([]));
-  }, []);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem('eventhub_event_images');
-      setEventImages(raw ? JSON.parse(raw) : {});
-    } catch {
-      setEventImages({});
+    async function bootstrap() {
+      try {
+        await loadSavedEvents();
+      } catch (e) {
+        setError(e.message);
+      }
+      try {
+        const response = await listarCategorias();
+        setCategories(response);
+      } catch {
+        setCategories([]);
+      }
     }
-  }, []);
+    bootstrap();
+  }, [loadSavedEvents]);
 
   async function handleOpenEditModal(event) {
+    const selectedEventId = event.eventId ?? event.id;
     setSelectedEvent(event);
     const categoryId = categories.find((c) => c.name === event.category)?.id ?? '';
     setEditForm({
-      id: event.eventId,
+      id: selectedEventId,
       title: event.title,
       description: event.description ?? '',
       categoryId,
@@ -60,7 +80,7 @@ export function ManageEventsPage({ isAdmin }) {
 
     if (isAdmin) {
       try {
-        const participantResponse = await listarParticipantesEventoSalvo(event.eventId);
+        const participantResponse = await listarParticipantesEventoSalvo(selectedEventId);
         setParticipants(participantResponse ?? []);
       } catch {
         setParticipants([]);
@@ -86,6 +106,24 @@ export function ManageEventsPage({ isAdmin }) {
     }
   }
 
+  async function handleDelete(eventId) {
+    try {
+      await deletarEvento(eventId);
+      setSavedEvents((prev) => prev.filter((item) => item.eventId !== eventId && item.id !== eventId));
+      if ((selectedEvent?.eventId ?? selectedEvent?.id) === eventId) {
+        handleCloseModal();
+      }
+    } catch (e) {
+      setError(e.message || 'Falha ao excluir evento.');
+    }
+  }
+
+  async function handleConfirmCancel() {
+    if (!confirmCancelEvent?.id) return;
+    await handleDelete(confirmCancelEvent.id);
+    setConfirmCancelEvent(null);
+  }
+
   async function handleUpdate(e) {
     e.preventDefault();
     if (!isAdmin || !editForm) return;
@@ -108,41 +146,61 @@ export function ManageEventsPage({ isAdmin }) {
   return (
     <main>
       <section className="cabecalho-busca">
-        <h1>Gerenciar eventos salvos</h1>
+        <h1>Gerenciar eventos</h1>
       </section>
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 
       <section className="grade-eventos">
+        {!isAdmin && savedEvents.length === 0 && (
+          <p>Seus eventos salvos aparecerão aqui.</p>
+        )}
         {savedEvents.map((event) => (
-          <div key={event.eventId}>
+          <div key={event.eventId ?? event.id}>
             <EventCard
               mode="saved"
               event={event}
-              imageUrl={event.imageUrl || eventImages[event.eventId]}
+              imageUrl={event.imageUrl || eventImages[event.eventId ?? event.id]}
               footerLabel="Evento salvo"
-              primaryActionLabel="Cancelar"
-              onPrimaryAction={() => handleUnsave(event.eventId)}
+              primaryActionLabel={isAdmin ? 'Cancelar evento' : 'Cancelar'}
+              onPrimaryAction={() => (isAdmin
+                ? setConfirmCancelEvent({ id: event.id, title: event.title })
+                : handleUnsave(event.eventId))}
               onEdit={isAdmin ? () => handleOpenEditModal(event) : undefined}
             />
           </div>
         ))}
       </section>
 
+      {isAdmin && confirmCancelEvent && (
+        <dialog className="modal-overlay" open aria-label="Confirmar cancelamento">
+          <section className="manage-edit-modal" aria-label="Confirmar cancelamento de evento">
+            <header className="manage-edit-modal-header">
+              <h3>Confirmar cancelamento</h3>
+            </header>
+            <p>
+              Deseja cancelar o evento <strong>{confirmCancelEvent.title}</strong>?
+            </p>
+            <div className="manage-edit-form">
+              <button type="button" className="manage-close-button" onClick={() => setConfirmCancelEvent(null)}>
+                Voltar
+              </button>
+              <button type="button" className="manage-save-button" onClick={handleConfirmCancel}>
+                Confirmar cancelamento
+              </button>
+            </div>
+          </section>
+        </dialog>
+      )}
+
       {isAdmin && editForm && (
         <dialog
           className="modal-overlay"
           open
           aria-label="Modal de edicao"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleCloseModal();
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              handleCloseModal();
-            }
+          onCancel={(e) => {
+            e.preventDefault();
+            handleCloseModal();
           }}
         >
           <section
@@ -176,7 +234,7 @@ export function ManageEventsPage({ isAdmin }) {
             </form>
 
             <section className="manage-participants">
-              <h4>Usuários que salvaram este evento</h4>
+              <h4>Usuários que salvaram este evento:</h4>
               <ul>
                 {participants.map((p) => (
                   <li key={`${p.userId}-${p.savedAt}`}>
@@ -195,3 +253,4 @@ export function ManageEventsPage({ isAdmin }) {
 ManageEventsPage.propTypes = {
   isAdmin: PropTypes.bool.isRequired,
 };
+
