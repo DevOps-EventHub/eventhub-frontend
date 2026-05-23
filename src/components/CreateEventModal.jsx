@@ -1,4 +1,6 @@
-﻿export function CreateEventModal({
+﻿import PropTypes from 'prop-types';
+
+export function CreateEventModal({
   isOpen,
   form,
   categories,
@@ -93,3 +95,34 @@
     </div>
   );
 }
+
+CreateEventModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  form: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    categoryName: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    startAt: PropTypes.string.isRequired,
+    endAt: PropTypes.string.isRequired,
+    capacity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    status: PropTypes.string.isRequired,
+  }).isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  minDateTime: PropTypes.string.isRequired,
+  isSavingEvent: PropTypes.bool.isRequired,
+  modalError: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onFormChange: PropTypes.func.isRequired,
+  onImageChange: PropTypes.func.isRequired,
+};
+
+CreateEventModal.defaultProps = {
+  modalError: '',
+};

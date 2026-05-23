@@ -1,5 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Grid2X2, List, Plus } from 'lucide-react';
+import PropTypes from 'prop-types';
 import {
   criarCategoria,
   criarEvento,
@@ -33,25 +34,16 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
   const [isSavingEvent, setIsSavingEvent] = useState(false);
   const [modalError, setModalError] = useState('');
   const [listError, setListError] = useState('');
-  const [eventImages, setEventImages] = useState({});
-  const [eventImageFile, setEventImageFile] = useState(null);
-  const [form, setForm] = useState(initialForm());
-
-  useEffect(() => {
-    if (openCreateModal) {
-      setIsModalOpen(true);
-      onOpenCreateModalChange(false);
-    }
-  }, [openCreateModal, onOpenCreateModalChange]);
-
-  useEffect(() => {
+  const [eventImages, setEventImages] = useState(() => {
     try {
       const raw = localStorage.getItem('eventhub_event_images');
-      setEventImages(raw ? JSON.parse(raw) : {});
+      return raw ? JSON.parse(raw) : {};
     } catch {
-      setEventImages({});
+      return {};
     }
-  }, []);
+  });
+  const [eventImageFile, setEventImageFile] = useState(null);
+  const [form, setForm] = useState(initialForm());
 
   useEffect(() => {
     loadData();
@@ -100,7 +92,7 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
       setCategories(refreshed);
       const existing = refreshed.find((c) => c.name.toLowerCase() === categoryName.toLowerCase());
       if (!existing?.id) {
-        throw new Error('Nao foi possivel resolver a categoria para criar o evento.');
+        throw new Error('Nao foi possivel resolver a categoria para criar o evento.', { cause: error });
       }
 
       return Number(existing.id);
@@ -159,6 +151,7 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
   }
 
   const minDateTime = new Date(Date.now() + 60000).toISOString().slice(0, 16);
+  const modalIsOpen = isModalOpen || openCreateModal;
 
   return (
     <main>
@@ -213,13 +206,16 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
       </section>
 
       <CreateEventModal
-        isOpen={isModalOpen}
+        isOpen={modalIsOpen}
         form={form}
         categories={categories}
         minDateTime={minDateTime}
         isSavingEvent={isSavingEvent}
         modalError={modalError}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          onOpenCreateModalChange(false);
+        }}
         onSubmit={handleCreateEvent}
         onFormChange={(field, value) => setForm((state) => ({ ...state, [field]: value }))}
         onImageChange={setEventImageFile}
@@ -228,3 +224,8 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
   );
 }
 
+DiscoverPage.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+  openCreateModal: PropTypes.bool.isRequired,
+  onOpenCreateModalChange: PropTypes.func.isRequired,
+};

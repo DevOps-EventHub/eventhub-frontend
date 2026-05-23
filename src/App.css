@@ -225,9 +225,6 @@
   position: absolute;
   inset: 0;
   content: '';
-}
-
-.event-media::after {
   background: linear-gradient(180deg, transparent, rgba(6, 18, 40, 0.1));
 }
 
