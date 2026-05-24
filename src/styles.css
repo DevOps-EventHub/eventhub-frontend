@@ -448,7 +448,7 @@ h1 {
   min-height: 232px;
   display: flex;
   flex-direction: column;
-  padding: 20px 22px 22px;
+  padding: 20px 28px 22px;
 }
 
 .linha-meta,
@@ -466,6 +466,8 @@ h1 {
 .etiqueta {
   padding: 4px 9px;
   border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
   background: #cce9fb;
   color: #06314b;
   font-size: 13px;
@@ -483,6 +485,7 @@ h1 {
   color: #101527;
   font-size: 20px;
   line-height: 1.2;
+  min-height: 56px;
   letter-spacing: 0;
 }
 
@@ -502,6 +505,7 @@ h1 {
   justify-content: space-between;
   gap: 12px;
   padding-top: 26px;
+  margin-top: auto;
 }
 
 .rodape-cartao strong {
@@ -517,6 +521,7 @@ h1 {
   background: #fff;
   color: #06136c;
   font-weight: 700;
+  margin-left: 8px;
 }
 
 .cartao-criar {
