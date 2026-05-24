@@ -138,7 +138,14 @@ a {
   align-items: center;
   gap: 10px;
   padding: 11px 22px;
-  background: #9a3d05;
+  background: #ffffff;
+  color: #08248d;
+  border: 1px solid #d1d9ea;
+  box-shadow: 0 6px 14px rgba(8, 36, 141, 0.08);
+}
+
+.botao-criar:hover {
+  background: #f5f8ff;
 }
 
 .botao-sair {

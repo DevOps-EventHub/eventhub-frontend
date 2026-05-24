@@ -5,13 +5,26 @@ const categoryFallbackImages = {
   tecnologia: new URL('../assets/events/tech-summit.svg', import.meta.url).href,
   design: new URL('../assets/events/design-workshop.svg', import.meta.url).href,
   networking: new URL('../assets/events/networking-gala.svg', import.meta.url).href,
+  conexoes: new URL('../assets/events/networking-gala.svg', import.meta.url).href,
   financas: new URL('../assets/events/future-cities-expo.svg', import.meta.url).href,
   saude: new URL('../assets/events/wellness-day.svg', import.meta.url).href,
 };
 const defaultFallbackImage = new URL('../assets/events/strategy-retreat.svg', import.meta.url).href;
 
+const titleTranslations = {
+  'Global AI Governance Summit': 'Cúpula Global de Governança em IA',
+  'Cloud Native Engineering Day': 'Dia de Engenharia Nativa em Nuvem',
+  'UX Strategy Masterclass': 'Masterclass de Estratégia de UX',
+  'Executive Leadership Mixer': 'Encontro Executivo de Lideranças',
+  'Annual Fintech Expo': 'Feira Fintech Anual',
+};
+
+function translateTitle(title) {
+  return titleTranslations[title] || title;
+}
+
 function formatDate(value) {
-  return new Date(value).toLocaleDateString('en-US', {
+  return new Date(value).toLocaleDateString('pt-BR', {
     month: 'short',
     day: '2-digit',
     year: 'numeric',
@@ -91,7 +104,7 @@ export function EventCard({
           </span>
         </div>
 
-        <h2>{event.title}</h2>
+        <h2>{translateTitle(event.title)}</h2>
         {event.description && <p>{event.description}</p>}
 
         <span className="local">

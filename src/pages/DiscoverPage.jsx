@@ -190,8 +190,8 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
             mode="discover"
             event={event}
             imageUrl={event.imageUrl || eventImages[event.id]}
-            footerLabel={`${event.capacity} spots`}
-            primaryActionLabel="Save"
+            footerLabel={`${event.capacity} vagas`}
+            primaryActionLabel="Salvar"
             onPrimaryAction={() => salvarEvento(event.id)}
           />
         ))}

@@ -3,7 +3,7 @@ import { listarEventosSalvos, removerEventoSalvo } from '../api/eventos.js';
 import { EventCard } from '../components/EventCard.jsx';
 
 function savedAtLabel(savedAt) {
-  return `Saved at ${new Date(savedAt).toLocaleDateString('en-US', {
+  return `Salvo em ${new Date(savedAt).toLocaleDateString('pt-BR', {
     month: 'short',
     day: '2-digit',
     year: 'numeric',
@@ -21,7 +21,7 @@ export function SavedEventsPage() {
         const response = await listarEventosSalvos();
         setSavedEvents(response ?? []);
       } catch (err) {
-        setError(err.message || 'Failed to load saved events.');
+        setError(err.message || 'Falha ao carregar eventos salvos.');
         setSavedEvents([]);
       }
     }
@@ -34,15 +34,15 @@ export function SavedEventsPage() {
       await removerEventoSalvo(eventId);
       setSavedEvents((prev) => prev.filter((item) => item.eventId !== eventId));
     } catch (err) {
-      setError(err.message || 'Failed to remove saved event.');
+      setError(err.message || 'Falha ao remover evento salvo.');
     }
   }
 
   return (
     <main>
       <section className="cabecalho-busca">
-        <p style={{ color: '#596174' }}>Dashboard &gt; Saved Events</p>
-        <h1>Saved Events</h1>
+        <p style={{ color: '#596174' }}>Painel &gt; Eventos Salvos</p>
+        <h1>Eventos Salvos</h1>
       </section>
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
