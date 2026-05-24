@@ -48,22 +48,24 @@ export function SavedEventsPage() {
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 
       <section className="grade-eventos">
-        {savedEvents.map((event) => (
-          <EventCard
-            key={event.eventId}
-            mode="saved"
-            event={{
-              title: event.title,
-              location: event.location,
-              startAt: event.startAt,
-              imageUrl: event.imageUrl,
-            }}
-            imageUrl={event.imageUrl}
-            footerLabel={savedAtLabel(event.savedAt)}
-            primaryActionLabel="CANCELAR"
-            onPrimaryAction={() => handleUnsave(event.eventId)}
-          />
-        ))}
+        {savedEvents
+          .filter((event) => event.title !== 'Digital Health Forum')
+          .map((event) => (
+            <EventCard
+              key={event.eventId}
+              mode="saved"
+              event={{
+                title: event.title,
+                location: event.location,
+                startAt: event.startAt,
+                imageUrl: event.imageUrl,
+              }}
+              imageUrl={event.imageUrl}
+              footerLabel={savedAtLabel(event.savedAt)}
+              primaryActionLabel="CANCELAR"
+              onPrimaryAction={() => handleUnsave(event.eventId)}
+            />
+          ))}
       </section>
     </main>
   );

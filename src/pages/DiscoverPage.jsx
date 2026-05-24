@@ -67,6 +67,7 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
     () =>
       events.filter(
         (event) =>
+          event.title !== 'Digital Health Forum' &&
           (!searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
           (!searchLocation || event.location.toLowerCase().includes(searchLocation.toLowerCase())),
       ),

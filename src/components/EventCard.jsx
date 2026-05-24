@@ -1,12 +1,36 @@
 ﻿import { CalendarDays, MapPin, Pencil } from 'lucide-react';
 import PropTypes from 'prop-types';
 
+const categoryFallbackImages = {
+  tecnologia: new URL('../assets/events/tech-summit.svg', import.meta.url).href,
+  design: new URL('../assets/events/design-workshop.svg', import.meta.url).href,
+  networking: new URL('../assets/events/networking-gala.svg', import.meta.url).href,
+  financas: new URL('../assets/events/future-cities-expo.svg', import.meta.url).href,
+  saude: new URL('../assets/events/wellness-day.svg', import.meta.url).href,
+};
+const defaultFallbackImage = new URL('../assets/events/strategy-retreat.svg', import.meta.url).href;
+
 function formatDate(value) {
   return new Date(value).toLocaleDateString('en-US', {
     month: 'short',
     day: '2-digit',
     year: 'numeric',
   });
+}
+
+function normalizeCategory(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim()
+    .toLowerCase();
+}
+
+function isValidImageUrl(value) {
+  if (typeof value !== 'string') return false;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized || normalized === 'null' || normalized === 'undefined') return false;
+  return true;
 }
 
 export function EventCard({
@@ -19,13 +43,29 @@ export function EventCard({
   onEdit,
 }) {
   const showImageSection = mode === 'discover' || mode === 'saved';
+  const fallbackImage = categoryFallbackImages[normalizeCategory(event.category)] || defaultFallbackImage;
+  const cardImage = isValidImageUrl(imageUrl) ? imageUrl.trim() : fallbackImage;
+  const statusClass = event.status && event.status.toLowerCase() === 'rascunho'
+    ? 'status-draft'
+    : event.status && event.status.toLowerCase() === 'cancelado'
+      ? 'status-cancelled'
+      : '';
 
   return (
     <article className="cartao-evento">
       {showImageSection && (
         <div className="imagem-evento">
-          {imageUrl && <img src={imageUrl} alt={event.title} />}
-          {event.status && <span className="selo-status">{event.status}</span>}
+          {cardImage && (
+            <img
+              src={cardImage}
+              alt={event.title}
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = defaultFallbackImage;
+              }}
+            />
+          )}
+          {event.status && <span className={`selo-status ${statusClass}`}>{event.status}</span>}
           {onEdit && (
             <button
               type="button"

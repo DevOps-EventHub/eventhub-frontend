@@ -413,7 +413,7 @@ h1 {
   position: absolute;
   top: 16px;
   left: 16px;
-  padding: 5px 10px;
+  padding: 6px 14px;
   border-radius: 6px;
   background: #08248d;
   color: #fff;
@@ -423,8 +423,9 @@ h1 {
 }
 
 .status-draft {
-  background: #e7edf6;
+  background: rgba(255, 255, 255, 0.94);
   color: #172033;
+  border: 1px solid rgba(23, 32, 51, 0.16);
 }
 
 .status-cancelled {
