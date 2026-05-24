@@ -9,7 +9,7 @@
 export const eventosExemplo = [
   {
     id: 1,
-    title: 'Summit Global de Governança em IA',
+    title: 'Cúpula Global de Governança em IA',
     description: 'Debates sobre frameworks éticos, regulação e impactos da inteligência artificial em empresas.',
     category: 'Tecnologia',
     location: 'Centro Metropolitano, São Paulo',
@@ -20,7 +20,7 @@ export const eventosExemplo = [
   },
   {
     id: 2,
-    title: 'Masterclass de Estratégia UX',
+    title: 'Oficina de Estratégia de UX',
     description: 'Uma imersão em ciclo de produto, discovery contínuo e sistemas centrados no usuário.',
     category: 'Design',
     location: 'Workshop online',
@@ -42,7 +42,7 @@ export const eventosExemplo = [
   },
   {
     id: 4,
-    title: 'Expo Fintech Anual',
+    title: 'Feira Fintech Anual',
     description: 'Novas soluções para pagamentos, crédito, banking as a service e infraestrutura financeira.',
     category: 'Finanças',
     location: 'Centro de Convenções, Recife',
@@ -97,7 +97,7 @@ export const eventosExemplo = [
   },
   {
     id: 9,
-    title: 'Congresso de Open Finance',
+    title: 'Congresso de Finanças Abertas',
     description: 'Especialistas discutem APIs financeiras, segurança, experiência do cliente e novos modelos de crédito.',
     category: 'Finanças',
     location: 'Centro Empresarial Paulista, São Paulo',
@@ -119,7 +119,7 @@ export const eventosExemplo = [
   },
   {
     id: 11,
-    title: 'Imersão DevOps Brasil',
+    title: 'Imersão em DevOps Brasil',
     description: 'Conteúdos sobre pipelines, observabilidade, containers, cloud native e cultura de entrega contínua.',
     category: 'Tecnologia',
     location: 'Arena Tech, Brasília',
