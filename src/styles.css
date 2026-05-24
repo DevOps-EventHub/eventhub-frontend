@@ -154,6 +154,7 @@ a {
   border-radius: 50%;
   background: linear-gradient(135deg, #d7eefb, #f7d9ba);
   border: 2px solid #fff;
+  margin-left: 10px;
   color: #08215e;
   font-size: 13px;
   font-weight: 800;
@@ -182,7 +183,7 @@ h1 {
   margin: 0 auto;
   padding: 28px;
   border: 1px solid #d6dfed;
-  border-radius: 18px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(12px);
@@ -201,7 +202,7 @@ h1 {
   gap: 12px;
   padding: 0 18px;
   border: 1px solid #c8d3e4;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f6f9fe;
   color: #4b5563;
   transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
@@ -312,7 +313,7 @@ h1 {
 .alternador button {
   width: 34px;
   height: 34px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .alternador button.ativo {
@@ -380,7 +381,7 @@ h1 {
 .cartao-criar {
   min-height: 410px;
   border: 1px solid #c8cfdd;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fff;
   overflow: hidden;
 }
@@ -407,7 +408,7 @@ h1 {
   top: 16px;
   left: 16px;
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #08248d;
   color: #fff;
   font-size: 12px;
@@ -457,7 +458,7 @@ h1 {
 
 .etiqueta {
   padding: 4px 9px;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #cce9fb;
   color: #06314b;
   font-size: 13px;
@@ -505,7 +506,7 @@ h1 {
   min-width: 74px;
   padding: 8px 12px;
   border: 1px solid #06136c;
-  border-radius: 5px;
+  border-radius: 6px;
   background: #fff;
   color: #06136c;
   font-weight: 700;
@@ -561,7 +562,7 @@ h1 {
 .paginacao button {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #1f2937;
 }
 
@@ -732,7 +733,7 @@ footer nav {
   min-height: 49px;
   padding: 0 14px;
   border: 1px solid #cad2df;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #f6f8fc;
   color: #101828;
 }
@@ -747,7 +748,7 @@ footer nav {
   margin-top: 4px;
   min-height: 50px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #1137a7;
   color: #fff;
   font-weight: 700;
@@ -790,7 +791,7 @@ footer nav {
 .modal {
   width: min(560px, calc(100% - 24px));
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 16px;
   display: grid;
   gap: 10px;
@@ -801,7 +802,7 @@ footer nav {
 .modal select {
   min-height: 40px;
   border: 1px solid #c4cfdf;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 10px;
 }
 
@@ -897,7 +898,7 @@ footer nav {
   overflow: auto;
   background: #f8fbff;
   border: 1px solid #c8d3e4;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 24px;
   box-shadow: 0 24px 60px rgba(9, 24, 66, 0.28);
 }
@@ -936,7 +937,7 @@ footer nav {
 .manage-edit-form select {
   min-height: 44px;
   border: 1px solid #bcc8dd;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 12px;
   background: #fff;
 }
@@ -949,7 +950,7 @@ footer nav {
 .manage-save-button {
   min-height: 42px;
   border: 1px solid #1f2d50;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
   color: #0e1d3f;
   font-weight: 700;

@@ -65,7 +65,7 @@
   color: #5b6372;
   background: #f0f3fb;
   border: 1px solid #c4cad8;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .search-box input {
@@ -161,7 +161,7 @@
   color: #26324a;
   background: #eef3ff;
   border: 1px solid #cad7f7;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .events-grid {
@@ -178,7 +178,7 @@
   flex-direction: column;
   background: #ffffff;
   border: 1px solid #c6ccd8;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .event-card.featured {
@@ -209,7 +209,7 @@
 
 .event-card.wide .event-media {
   min-height: 224px;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .event-media img {
@@ -265,7 +265,7 @@
   height: 19px;
   border: 2px solid currentColor;
   border-bottom: 0;
-  border-radius: 2px 2px 0 0;
+  border-radius: 4px 4px 0 0;
 }
 
 .bookmark-button span::after {
@@ -379,7 +379,7 @@
 
 .calendar-icon {
   border: 1.8px solid currentColor;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .calendar-icon::before {
@@ -465,7 +465,7 @@
 .outline-action {
   min-height: 34px;
   padding: 0 14px;
-  border-radius: 4px;
+  border-radius: 6px;
   font: inherit;
   font-size: 0.82rem;
   cursor: pointer;
@@ -615,7 +615,7 @@
   margin: 16px 0;
   padding: 16px;
   border: 1px solid #d0d6e2;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #fff;
 }
 
