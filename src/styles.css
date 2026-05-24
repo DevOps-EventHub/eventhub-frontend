@@ -221,6 +221,7 @@ h1 {
   outline: 0;
   background: transparent;
   color: #182033;
+  padding-left: 10px;
 }
 
 .botao-pesquisar {
