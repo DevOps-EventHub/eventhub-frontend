@@ -1,0 +1,256 @@
+﻿import { useCallback, useEffect, useState } from 'react';
+import { X } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { EventCard } from '../components/EventCard.jsx';
+import {
+  atualizarEvento,
+  deletarEvento,
+  listarCategorias,
+  listarEventos,
+  listarEventosSalvos,
+  listarParticipantesEventoSalvo,
+  removerEventoSalvo,
+} from '../api/eventos.js';
+
+function toDateInput(value) {
+  if (!value) return '';
+  return new Date(value).toISOString().slice(0, 16);
+}
+
+export function ManageEventsPage({ isAdmin }) {
+  const [savedEvents, setSavedEvents] = useState([]);
+  const [eventImages] = useState(() => {
+    try {
+      const raw = localStorage.getItem('eventhub_event_images');
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [categories, setCategories] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [editForm, setEditForm] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [error, setError] = useState('');
+  const [confirmCancelEvent, setConfirmCancelEvent] = useState(null);
+
+  const loadSavedEvents = useCallback(async () => {
+    if (isAdmin) {
+      const response = await listarEventos({ pagina: 0, tamanho: 100 });
+      setSavedEvents(response?.content ?? []);
+      return;
+    }
+
+    const response = await listarEventosSalvos();
+    setSavedEvents(response ?? []);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    async function bootstrap() {
+      try {
+        await loadSavedEvents();
+      } catch (e) {
+        setError(e.message);
+      }
+      try {
+        const response = await listarCategorias();
+        setCategories(response);
+      } catch {
+        setCategories([]);
+      }
+    }
+    bootstrap();
+  }, [loadSavedEvents]);
+
+  async function handleOpenEditModal(event) {
+    const selectedEventId = event.eventId ?? event.id;
+    setSelectedEvent(event);
+    const categoryId = categories.find((c) => c.name === event.category)?.id ?? '';
+    setEditForm({
+      id: selectedEventId,
+      title: event.title,
+      description: event.description ?? '',
+      categoryId,
+      location: event.location,
+      startAt: toDateInput(event.startAt),
+      endAt: toDateInput(event.startAt),
+      capacity: 100,
+      status: 'PUBLICADO',
+    });
+
+    if (isAdmin) {
+      try {
+        const participantResponse = await listarParticipantesEventoSalvo(selectedEventId);
+        setParticipants(participantResponse ?? []);
+      } catch {
+        setParticipants([]);
+      }
+    }
+  }
+
+  function handleCloseModal() {
+    setSelectedEvent(null);
+    setEditForm(null);
+    setParticipants([]);
+  }
+
+  async function handleUnsave(eventId) {
+    try {
+      await removerEventoSalvo(eventId);
+      setSavedEvents((prev) => prev.filter((item) => item.eventId !== eventId));
+      if (selectedEvent?.eventId === eventId) {
+        handleCloseModal();
+      }
+    } catch (e) {
+      setError(e.message || 'Falha ao dessalvar evento.');
+    }
+  }
+
+  async function handleDelete(eventId) {
+    try {
+      await deletarEvento(eventId);
+      setSavedEvents((prev) => prev.filter((item) => item.eventId !== eventId && item.id !== eventId));
+      if ((selectedEvent?.eventId ?? selectedEvent?.id) === eventId) {
+        handleCloseModal();
+      }
+    } catch (e) {
+      setError(e.message || 'Falha ao excluir evento.');
+    }
+  }
+
+  async function handleConfirmCancel() {
+    if (!confirmCancelEvent?.id) return;
+    await handleDelete(confirmCancelEvent.id);
+    setConfirmCancelEvent(null);
+  }
+
+  async function handleUpdate(e) {
+    e.preventDefault();
+    if (!isAdmin || !editForm) return;
+
+    await atualizarEvento(editForm.id, {
+      title: editForm.title,
+      description: editForm.description,
+      categoryId: Number(editForm.categoryId),
+      location: editForm.location,
+      startAt: new Date(editForm.startAt).toISOString(),
+      endAt: new Date(editForm.endAt).toISOString(),
+      capacity: Number(editForm.capacity),
+      status: editForm.status,
+    });
+
+    await loadSavedEvents();
+    handleCloseModal();
+  }
+
+  return (
+    <main>
+      <section className="cabecalho-busca">
+        <h1>Gerenciar eventos</h1>
+      </section>
+
+      {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+
+      <section className="grade-eventos">
+        {!isAdmin && savedEvents.length === 0 && (
+          <p>Seus eventos salvos aparecerão aqui.</p>
+        )}
+        {savedEvents.map((event) => (
+          <div key={event.eventId ?? event.id}>
+            <EventCard
+              mode="saved"
+              event={event}
+              imageUrl={event.imageUrl || eventImages[event.eventId ?? event.id]}
+              footerLabel="Evento salvo"
+              primaryActionLabel={isAdmin ? 'Cancelar evento' : 'Cancelar'}
+              onPrimaryAction={() => (isAdmin
+                ? setConfirmCancelEvent({ id: event.id, title: event.title })
+                : handleUnsave(event.eventId))}
+              onEdit={isAdmin ? () => handleOpenEditModal(event) : undefined}
+            />
+          </div>
+        ))}
+      </section>
+
+      {isAdmin && confirmCancelEvent && (
+        <dialog className="modal-overlay" open aria-label="Confirmar cancelamento">
+          <section className="manage-edit-modal" aria-label="Confirmar cancelamento de evento">
+            <header className="manage-edit-modal-header">
+              <h3>Confirmar cancelamento</h3>
+            </header>
+            <p>
+              Deseja cancelar o evento <strong>{confirmCancelEvent.title}</strong>?
+            </p>
+            <div className="manage-edit-form">
+              <button type="button" className="manage-close-button" onClick={() => setConfirmCancelEvent(null)}>
+                Voltar
+              </button>
+              <button type="button" className="manage-save-button" onClick={handleConfirmCancel}>
+                Confirmar cancelamento
+              </button>
+            </div>
+          </section>
+        </dialog>
+      )}
+
+      {isAdmin && editForm && (
+        <dialog
+          className="modal-overlay"
+          open
+          aria-label="Modal de edicao"
+          onCancel={(e) => {
+            e.preventDefault();
+            handleCloseModal();
+          }}
+        >
+          <section
+            className="manage-edit-modal"
+            aria-label="Editar evento salvo"
+          >
+            <header className="manage-edit-modal-header">
+              <h3>Editar evento salvo</h3>
+              <button type="button" className="manage-close-button" onClick={handleCloseModal} aria-label="Fechar modal">
+                <X size={18} />
+              </button>
+            </header>
+
+            <form onSubmit={handleUpdate} className="manage-edit-form">
+              <input value={editForm.title} onChange={(e) => setEditForm((s) => ({ ...s, title: e.target.value }))} required />
+              <textarea value={editForm.description} onChange={(e) => setEditForm((s) => ({ ...s, description: e.target.value }))} />
+              <select value={editForm.categoryId} onChange={(e) => setEditForm((s) => ({ ...s, categoryId: e.target.value }))} required>
+                <option value="">Category</option>
+                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              <input value={editForm.location} onChange={(e) => setEditForm((s) => ({ ...s, location: e.target.value }))} required />
+              <input type="datetime-local" value={editForm.startAt} onChange={(e) => setEditForm((s) => ({ ...s, startAt: e.target.value }))} required />
+              <input type="datetime-local" value={editForm.endAt} onChange={(e) => setEditForm((s) => ({ ...s, endAt: e.target.value }))} required />
+              <input type="number" min="1" value={editForm.capacity} onChange={(e) => setEditForm((s) => ({ ...s, capacity: e.target.value }))} required />
+              <select value={editForm.status} onChange={(e) => setEditForm((s) => ({ ...s, status: e.target.value }))}>
+                <option>PUBLICADO</option>
+                <option>RASCUNHO</option>
+                <option>CANCELADO</option>
+              </select>
+              <button type="submit" className="manage-save-button">Salvar</button>
+            </form>
+
+            <section className="manage-participants">
+              <h4>Usuários que salvaram este evento:</h4>
+              <ul>
+                {participants.map((p) => (
+                  <li key={`${p.userId}-${p.savedAt}`}>
+                    {p.name} ({p.email}) - {new Date(p.savedAt).toLocaleString()}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </section>
+        </dialog>
+      )}
+    </main>
+  );
+}
+
+ManageEventsPage.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
+};
+

@@ -3,8 +3,8 @@
 ## Descricao do projeto
 Interface web do EventHub para descoberta e gerenciamento de eventos, consumindo a API do backend.
 
-## Objetivo da aplicacao
-Permitir ao usuario interagir com o sistema de eventos via web, incluindo operacoes de CRUD conforme perfil de acesso.
+## Objetivo da aplicação
+Permitir ao usuário interagir com o sistema de eventos via web, incluindo operações de CRUD conforme perfil de acesso.
 
 ## Tecnologias utilizadas
 - React
@@ -13,8 +13,8 @@ Permitir ao usuario interagir com o sistema de eventos via web, incluindo operac
 - ESLint
 - Vitest
 
-## Instrucoes para execucao
-1. Instale dependencias com npm.
+## Instruções para execução
+1. Instale dependências com npm.
 2. Crie o arquivo `.env` a partir do exemplo:
 ```bash
 cp .env.example .env
@@ -23,7 +23,7 @@ No Windows (PowerShell), use:
 ```powershell
 Copy-Item .env.example .env
 ```
-3. Os valores padrão do `.env` ja funcionam para execução local; altere apenas se seu ambiente usar portas/URLs diferentes.
+3. Os valores padrão do `.env` já funcionam para execução local; altere apenas se seu ambiente usar portas/URLs diferentes.
 4. Inicie o servidor de desenvolvimento.
 
 ## Comandos principais
@@ -36,17 +36,17 @@ npm run test:coverage
 npm run lint
 ```
 
-## Estrutura basica do projeto
-- `src/pages`: paginas principais da aplicacao.
-- `src/components`: componentes reutilizaveis.
-- `src/api`: integracao com endpoints do backend.
+## Estrutura básica do projeto
+- `src/pages`: páginas principais da aplicação.
+- `src/components`: componentes reutilizáveis.
+- `src/api`: integração com endpoints do backend.
 - `src/hooks`: hooks customizados.
-- `src/assets`: arquivos estaticos.
+- `src/assets`: arquivos estáticos.
 
-Documentacao integrada (infra, frontend e backend):
+Documentação integrada (infra, frontend e backend):
 - https://github.com/DevOps-EventHub/eventhub-infra
 
 ## Integrantes da equipe
 - Samuel Araujo
-- Jose Pereira Neto
-- Jose Mailson
+- José Pereira Neto
+- José Mailson
