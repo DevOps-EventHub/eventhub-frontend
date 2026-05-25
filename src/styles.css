@@ -55,27 +55,60 @@ a {
   border: 0;
   background: transparent;
   padding: 0;
-  color: #06136c;
+  color: #08248d;
   font-size: 23px;
   font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1em;
+  letter-spacing: -0.02em;
+}
+
+.brand-title {
+  color: #08248d;
+}
+
+.brand-main {
+  font-weight: 800;
+}
+
+.brand-accent {
+  font-weight: 700;
 }
 
 .topo nav {
   display: flex;
-  gap: 24px;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #d8e0ee;
+  border-radius: 999px;
+  background: #eef3fb;
   color: #2f3445;
 }
 
 .topo nav a,
 .topo nav button {
-  padding: 24px 0 19px;
-  border-bottom: 2px solid transparent;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #334155;
+  font-weight: 700;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .topo nav a.ativo,
 .topo nav button.ativo {
+  background: #ffffff;
   color: #06136c;
-  border-color: #06136c;
+  box-shadow: 0 2px 8px rgba(16, 21, 39, 0.12);
+}
+
+.topo nav a:hover,
+.topo nav button:hover {
+  background: #dde8f8;
+  color: #06136c;
 }
 
 .acoes-topo {
@@ -93,6 +126,11 @@ a {
   border-radius: 8px;
   font-weight: 700;
   box-shadow: 0 10px 20px rgba(8, 36, 141, 0.16);
+  min-height: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .botao-criar {
@@ -100,7 +138,14 @@ a {
   align-items: center;
   gap: 10px;
   padding: 11px 22px;
-  background: #9a3d05;
+  background: #ffffff;
+  color: #08248d;
+  border: 1px solid #d1d9ea;
+  box-shadow: 0 6px 14px rgba(8, 36, 141, 0.08);
+}
+
+.botao-criar:hover {
+  background: #f5f8ff;
 }
 
 .botao-sair {
@@ -121,6 +166,7 @@ a {
   border-radius: 50%;
   background: linear-gradient(135deg, #d7eefb, #f7d9ba);
   border: 2px solid #fff;
+  margin-left: 10px;
   color: #08215e;
   font-size: 13px;
   font-weight: 800;
@@ -145,30 +191,39 @@ h1 {
 }
 
 .painel-busca {
-  padding: 22px;
-  border: 1px solid #c8cfdd;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.74);
+  width: min(940px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid #d6dfed;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 .linha-busca {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(180px, 250px) 100px;
-  gap: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #cbd2df;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 250px) 116px;
+  gap: 14px;
 }
 
 .campo-busca {
-  min-height: 48px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 16px;
-  border: 1px solid #c1cad9;
+  padding: 0 18px;
+  border: 1px solid #c8d3e4;
   border-radius: 8px;
-  background: #eef3fb;
+  background: #f6f9fe;
   color: #4b5563;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.campo-busca:focus-within {
+  border-color: #08248d;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(8, 36, 141, 0.1);
 }
 
 .campo-busca input {
@@ -178,6 +233,7 @@ h1 {
   outline: 0;
   background: transparent;
   color: #182033;
+  padding-left: 10px;
 }
 
 .botao-pesquisar {
@@ -270,7 +326,7 @@ h1 {
 .alternador button {
   width: 34px;
   height: 34px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .alternador button.ativo {
@@ -338,7 +394,7 @@ h1 {
 .cartao-criar {
   min-height: 410px;
   border: 1px solid #c8cfdd;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fff;
   overflow: hidden;
 }
@@ -364,8 +420,8 @@ h1 {
   position: absolute;
   top: 16px;
   left: 16px;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 6px;
   background: #08248d;
   color: #fff;
   font-size: 12px;
@@ -374,8 +430,9 @@ h1 {
 }
 
 .status-draft {
-  background: #e7edf6;
+  background: rgba(255, 255, 255, 0.94);
   color: #172033;
+  border: 1px solid rgba(23, 32, 51, 0.16);
 }
 
 .status-cancelled {
@@ -398,7 +455,7 @@ h1 {
   min-height: 232px;
   display: flex;
   flex-direction: column;
-  padding: 20px 22px 22px;
+  padding: 20px 28px 22px;
 }
 
 .linha-meta,
@@ -415,7 +472,9 @@ h1 {
 
 .etiqueta {
   padding: 4px 9px;
-  border-radius: 4px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
   background: #cce9fb;
   color: #06314b;
   font-size: 13px;
@@ -433,12 +492,13 @@ h1 {
   color: #101527;
   font-size: 20px;
   line-height: 1.2;
+  min-height: 56px;
   letter-spacing: 0;
 }
 
 .cartao-evento p {
   margin: 0 0 16px;
-  color: #4a5262;
+  color: #374151;
   line-height: 1.45;
 }
 
@@ -452,6 +512,7 @@ h1 {
   justify-content: space-between;
   gap: 12px;
   padding-top: 26px;
+  margin-top: auto;
 }
 
 .rodape-cartao strong {
@@ -463,10 +524,11 @@ h1 {
   min-width: 74px;
   padding: 8px 12px;
   border: 1px solid #06136c;
-  border-radius: 5px;
+  border-radius: 6px;
   background: #fff;
   color: #06136c;
   font-weight: 700;
+  margin-left: 8px;
 }
 
 .cartao-criar {
@@ -519,7 +581,7 @@ h1 {
 .paginacao button {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #1f2937;
 }
 
@@ -690,7 +752,7 @@ footer nav {
   min-height: 49px;
   padding: 0 14px;
   border: 1px solid #cad2df;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #f6f8fc;
   color: #101828;
 }
@@ -705,7 +767,7 @@ footer nav {
   margin-top: 4px;
   min-height: 50px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #1137a7;
   color: #fff;
   font-weight: 700;
@@ -748,7 +810,7 @@ footer nav {
 .modal {
   width: min(560px, calc(100% - 24px));
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 16px;
   display: grid;
   gap: 10px;
@@ -759,7 +821,7 @@ footer nav {
 .modal select {
   min-height: 40px;
   border: 1px solid #c4cfdf;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 10px;
 }
 
@@ -855,7 +917,7 @@ footer nav {
   overflow: auto;
   background: #f8fbff;
   border: 1px solid #c8d3e4;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 24px;
   box-shadow: 0 24px 60px rgba(9, 24, 66, 0.28);
 }
@@ -894,7 +956,7 @@ footer nav {
 .manage-edit-form select {
   min-height: 44px;
   border: 1px solid #bcc8dd;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 12px;
   background: #fff;
 }
@@ -907,7 +969,7 @@ footer nav {
 .manage-save-button {
   min-height: 42px;
   border: 1px solid #1f2d50;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
   color: #0e1d3f;
   font-weight: 700;
