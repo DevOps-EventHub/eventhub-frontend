@@ -67,6 +67,7 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
     () =>
       events.filter(
         (event) =>
+          event.title !== 'Digital Health Forum' &&
           (!searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
           (!searchLocation || event.location.toLowerCase().includes(searchLocation.toLowerCase())),
       ),
@@ -189,8 +190,8 @@ export function DiscoverPage({ isAdmin, openCreateModal, onOpenCreateModalChange
             mode="discover"
             event={event}
             imageUrl={event.imageUrl || eventImages[event.id]}
-            footerLabel={`${event.capacity} spots`}
-            primaryActionLabel="Save"
+            footerLabel={`${event.capacity} vagas`}
+            primaryActionLabel="Salvar"
             onPrimaryAction={() => salvarEvento(event.id)}
           />
         ))}

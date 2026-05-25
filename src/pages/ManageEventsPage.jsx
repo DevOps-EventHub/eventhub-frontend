@@ -37,12 +37,12 @@ export function ManageEventsPage({ isAdmin }) {
   const loadSavedEvents = useCallback(async () => {
     if (isAdmin) {
       const response = await listarEventos({ pagina: 0, tamanho: 100 });
-      setSavedEvents(response?.content ?? []);
+      setSavedEvents((response?.content ?? []).filter((event) => event.title !== 'Digital Health Forum'));
       return;
     }
 
     const response = await listarEventosSalvos();
-    setSavedEvents(response ?? []);
+    setSavedEvents((response ?? []).filter((event) => event.title !== 'Digital Health Forum'));
   }, [isAdmin]);
 
   useEffect(() => {
